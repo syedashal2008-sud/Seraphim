@@ -8,7 +8,7 @@ interface Particle {
   baseVx: number;
   baseVy: number;
   radius: number;
-  alpha: number;
+  fillStyle: string;
   isBurgundy: boolean;
 }
 
@@ -21,21 +21,35 @@ interface ParticleBackgroundProps {
 const BURGUNDY_RGB = '136, 0, 33';
 const INK_RGB = '0, 0, 0';
 const WHITE_RGB = '255, 255, 255';
-const LINK_DISTANCE = 128;
-const MOUSE_RADIUS = 145;
+const LINK_DISTANCE = 122;
+const MOUSE_RADIUS = 140;
+const ALPHA_BUCKETS = 8;
+
+function buildAlphaPalette(rgb: string, maxAlpha: number): string[] {
+  const palette: string[] = [];
+  for (let i = 0; i < ALPHA_BUCKETS; i++) {
+    const a = (((i + 1) / ALPHA_BUCKETS) * maxAlpha).toFixed(3);
+    palette.push(`rgba(${rgb}, ${a})`);
+  }
+  return palette;
+}
 
 function createParticles(
   width: number,
   height: number,
-  variant: 'light' | 'dark'
+  variant: 'light' | 'dark',
+  fixed: boolean
 ): Particle[] {
   const area = width * height;
-  const count = Math.min(78, Math.max(24, Math.floor(area / 21000)));
+  const maxCount = fixed ? 48 : 30;
+  const minCount = fixed ? 20 : 14;
+  const count = Math.min(maxCount, Math.max(minCount, Math.floor(area / 28000)));
+  const neutralRgb = variant === 'dark' ? WHITE_RGB : INK_RGB;
   const particles: Particle[] = [];
 
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const speed = 0.16 + Math.random() * 0.28;
+    const speed = 0.16 + Math.random() * 0.26;
     const vx = Math.cos(angle) * speed;
     const vy = Math.sin(angle) * speed;
     const isBurgundy = Math.random() < 0.28;
@@ -49,6 +63,10 @@ function createParticles(
           ? 0.22 + Math.random() * 0.24
           : 0.14 + Math.random() * 0.2;
 
+    const fillStyle = isBurgundy
+      ? `rgba(${BURGUNDY_RGB}, ${alpha.toFixed(2)})`
+      : `rgba(${neutralRgb}, ${alpha.toFixed(2)})`;
+
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
@@ -56,8 +74,8 @@ function createParticles(
       vy,
       baseVx: vx,
       baseVy: vy,
-      radius: isBurgundy ? 1.4 + Math.random() * 1.4 : 1.1 + Math.random() * 1.3,
-      alpha,
+      radius: isBurgundy ? 1.4 + Math.random() * 1.3 : 1.1 + Math.random() * 1.2,
+      fillStyle,
       isBurgundy,
     });
   }
@@ -83,14 +101,34 @@ export function ParticleBackground({
     let prefersReducedMotion = reducedMotionQuery.matches;
 
     const neutralRgb = variant === 'dark' ? WHITE_RGB : INK_RGB;
+    const burgundyLinks = buildAlphaPalette(
+      BURGUNDY_RGB,
+      variant === 'dark' ? 0.2 : 0.12
+    );
+    const neutralLinks = buildAlphaPalette(
+      neutralRgb,
+      variant === 'dark' ? 0.1 : 0.075
+    );
+
     const parentEl = fixed ? null : canvas.parentElement;
 
     let width = fixed ? window.innerWidth : parentEl?.clientWidth || window.innerWidth;
     let height = fixed ? window.innerHeight : parentEl?.clientHeight || window.innerHeight;
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let particles = createParticles(width, height, variant);
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    let particles = createParticles(width, height, variant, fixed);
     let animationFrameId: number | null = null;
     let lastScrollY = window.scrollY;
+    let isVisibleOnScreen = fixed;
+
+    const cachedRect = { left: 0, top: 0, right: width, bottom: height };
+    const updateCachedRect = () => {
+      if (fixed) return;
+      const rect = canvas.getBoundingClientRect();
+      cachedRect.left = rect.left;
+      cachedRect.top = rect.top;
+      cachedRect.right = rect.right;
+      cachedRect.bottom = rect.bottom;
+    };
 
     const pointer = {
       x: -9999,
@@ -110,19 +148,21 @@ export function ParticleBackground({
 
       width = nextWidth;
       height = nextHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      particles = createParticles(width, height, variant);
+      particles = createParticles(width, height, variant, fixed);
+      updateCachedRect();
     };
 
     const drawFrame = (animate: boolean) => {
       ctx.clearRect(0, 0, width, height);
 
       if (animate) {
+        const maxMouseDistSq = MOUSE_RADIUS * MOUSE_RADIUS;
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
 
@@ -130,9 +170,8 @@ export function ParticleBackground({
             const dx = p.x - pointer.x;
             const dy = p.y - pointer.y;
             const distSq = dx * dx + dy * dy;
-            const maxDistSq = MOUSE_RADIUS * MOUSE_RADIUS;
 
-            if (distSq > 0.01 && distSq < maxDistSq) {
+            if (distSq > 0.01 && distSq < maxMouseDistSq) {
               const dist = Math.sqrt(distSq);
               const force = (1 - dist / MOUSE_RADIUS) * 0.28;
               p.vx += (dx / dist) * force;
@@ -162,26 +201,21 @@ export function ParticleBackground({
         for (let j = i + 1; j < particles.length; j++) {
           const b = particles[j];
           const dx = a.x - b.x;
+          if (dx > LINK_DISTANCE || dx < -LINK_DISTANCE) continue;
           const dy = a.y - b.y;
+          if (dy > LINK_DISTANCE || dy < -LINK_DISTANCE) continue;
+
           const distSq = dx * dx + dy * dy;
-
           if (distSq < maxLinkSq) {
-            const dist = Math.sqrt(distSq);
-            const strength = 1 - dist / LINK_DISTANCE;
+            const strength = 1 - Math.sqrt(distSq) / LINK_DISTANCE;
+            const bucket = Math.min(
+              ALPHA_BUCKETS - 1,
+              Math.max(0, Math.floor(strength * ALPHA_BUCKETS))
+            );
             const hasBurgundy = a.isBurgundy || b.isBurgundy;
-            const baseLinkAlpha =
-              variant === 'dark'
-                ? hasBurgundy
-                  ? 0.2
-                  : 0.1
-                : hasBurgundy
-                  ? 0.12
-                  : 0.075;
-            const lineAlpha = strength * baseLinkAlpha;
-
             ctx.strokeStyle = hasBurgundy
-              ? `rgba(${BURGUNDY_RGB}, ${lineAlpha.toFixed(4)})`
-              : `rgba(${neutralRgb}, ${lineAlpha.toFixed(4)})`;
+              ? burgundyLinks[bucket]
+              : neutralLinks[bucket];
 
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -193,10 +227,7 @@ export function ParticleBackground({
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        ctx.fillStyle = p.isBurgundy
-          ? `rgba(${BURGUNDY_RGB}, ${p.alpha})`
-          : `rgba(${neutralRgb}, ${p.alpha})`;
-
+        ctx.fillStyle = p.fillStyle;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -211,7 +242,7 @@ export function ParticleBackground({
     };
 
     const tick = () => {
-      if (document.hidden || prefersReducedMotion) {
+      if (document.hidden || prefersReducedMotion || !isVisibleOnScreen) {
         animationFrameId = null;
         return;
       }
@@ -224,28 +255,28 @@ export function ParticleBackground({
         drawFrame(false);
         return;
       }
-      if (animationFrameId === null && !document.hidden) {
+      if (animationFrameId === null && !document.hidden && isVisibleOnScreen) {
         animationFrameId = window.requestAnimationFrame(tick);
       }
     };
 
     const handlePointerMove = (event: PointerEvent) => {
       if (event.pointerType && event.pointerType !== 'mouse') return;
+      if (!isVisibleOnScreen) return;
 
       if (fixed) {
         pointer.x = event.clientX;
         pointer.y = event.clientY;
         pointer.active = true;
       } else {
-        const rect = canvas.getBoundingClientRect();
         const inside =
-          event.clientX >= rect.left &&
-          event.clientX <= rect.right &&
-          event.clientY >= rect.top &&
-          event.clientY <= rect.bottom;
+          event.clientX >= cachedRect.left &&
+          event.clientX <= cachedRect.right &&
+          event.clientY >= cachedRect.top &&
+          event.clientY <= cachedRect.bottom;
         if (inside) {
-          pointer.x = event.clientX - rect.left;
-          pointer.y = event.clientY - rect.top;
+          pointer.x = event.clientX - cachedRect.left;
+          pointer.y = event.clientY - cachedRect.top;
           pointer.active = true;
         } else {
           pointer.active = false;
@@ -258,7 +289,12 @@ export function ParticleBackground({
     };
 
     const handleScroll = () => {
-      if (!fixed) return;
+      if (!fixed) {
+        if (isVisibleOnScreen) {
+          updateCachedRect();
+        }
+        return;
+      }
       const currentY = window.scrollY;
       const deltaY = currentY - lastScrollY;
       lastScrollY = currentY;
@@ -286,6 +322,25 @@ export function ParticleBackground({
       startLoop();
     };
 
+    let intersectionObserver: IntersectionObserver | null = null;
+    if (!fixed && typeof IntersectionObserver !== 'undefined') {
+      intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          isVisibleOnScreen = Boolean(entry?.isIntersecting);
+          if (isVisibleOnScreen) {
+            updateCachedRect();
+            startLoop();
+          } else {
+            pointer.active = false;
+            stopLoop();
+          }
+        },
+        { rootMargin: '120px 0px' }
+      );
+      intersectionObserver.observe(canvas);
+    }
+
     resizeCanvas();
     startLoop();
 
@@ -304,6 +359,7 @@ export function ParticleBackground({
 
     return () => {
       stopLoop();
+      intersectionObserver?.disconnect();
       resizeObserver?.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('pointermove', handlePointerMove);

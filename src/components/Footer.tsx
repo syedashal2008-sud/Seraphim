@@ -1,6 +1,7 @@
 import { useState, type MouseEvent } from 'react';
 import { Check, Copy, FileDown, Mail } from 'lucide-react';
 import { motion } from 'motion/react';
+import { GlassRefraction } from './GlassRefraction';
 import { Magnetic } from './Magnetic';
 
 const EMAIL = 'syedashal2008@gmail.com';
@@ -81,9 +82,10 @@ export function Footer() {
       transition={{ duration: 0.55, ease: EDITORIAL_EASE }}
       className="relative z-[2] w-full bg-transparent px-4 pb-6 pt-10 text-[#000000] transition-colors duration-300 dark:text-[#ffffff] sm:px-8 sm:pb-8 sm:pt-14 lg:px-12"
     >
-      <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-3xl border border-black/12 bg-[#f9f9fb] px-6 pt-12 text-[#000000] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.12)] transition-colors duration-300 dark:border-white/12 dark:bg-[#09090b] dark:text-[#ffffff] dark:shadow-[0_24px_70px_-20px_rgba(0,0,0,0.9)] sm:px-10 sm:pt-14 lg:px-14 lg:pt-16">
+      <div className="glass-surface relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl px-6 pt-12 text-[#000000] transition-colors duration-300 dark:text-[#ffffff] sm:px-10 sm:pt-14 lg:px-14 lg:pt-16">
+        <GlassRefraction />
         {/* Top Split Layout: Brand Summary (Left) + 4 Navigation Columns (Right) */}
-        <div className="grid grid-cols-1 gap-12 pb-12 lg:grid-cols-12 lg:gap-10">
+        <div className="relative z-10 grid grid-cols-1 gap-12 pb-12 lg:grid-cols-12 lg:gap-10">
           {/* Left Column: Brand Identity & Direct Summary */}
           <div className="lg:col-span-4">
             <a
@@ -106,7 +108,7 @@ export function Footer() {
               <Magnetic strength={0.3} proximity={28} maxOffset={8}>
                 <a
                   href={`mailto:${EMAIL}`}
-                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl bg-[#880021] px-3.5 py-2 font-display text-xs font-semibold text-[#ffffff] transition-colors duration-200 hover:bg-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:hover:bg-[#ffffff] dark:hover:text-[#000000] dark:focus-visible:ring-[#d43b5c]"
+                  className="liquid-glass-btn-accent inline-flex min-h-[38px] items-center gap-1.5 px-4 py-2 font-display text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
                 >
                   <Mail className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>Send Email</span>
@@ -117,7 +119,7 @@ export function Footer() {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="inline-flex min-h-[38px] cursor-pointer items-center gap-1.5 rounded-xl border border-black/15 bg-transparent px-3.5 py-2 font-display text-xs font-medium text-[#000000] transition-colors duration-200 hover:border-[#880021] hover:text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:border-white/20 dark:text-[#ffffff] dark:hover:border-[#d43b5c] dark:hover:text-[#d43b5c] dark:focus-visible:ring-[#d43b5c]"
+                  className="liquid-glass-btn inline-flex min-h-[38px] cursor-pointer items-center gap-1.5 px-4 py-2 font-display text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
                 >
                   {emailCopied ? (
                     <Check className="h-3.5 w-3.5 text-[#880021] dark:text-[#d43b5c]" aria-hidden="true" />
@@ -231,7 +233,7 @@ export function Footer() {
         </div>
 
         {/* Middle Hairline Divider & Copyright Strip */}
-        <div className="flex flex-col items-start justify-between gap-2 border-t border-black/10 py-5 font-display text-xs text-black/55 dark:border-white/10 dark:text-white/55 sm:flex-row sm:items-center">
+        <div className="relative z-10 flex flex-col items-start justify-between gap-2 border-t border-black/10 py-5 font-display text-xs text-black/55 dark:border-white/10 dark:text-white/55 sm:flex-row sm:items-center">
           <p className="tabular-nums">
             &copy; 2026 Seraphim Design. All rights reserved.
           </p>
@@ -252,7 +254,7 @@ export function Footer() {
           aria-hidden="true"
           className="relative -mx-2 mt-1 select-none overflow-hidden pb-2 text-center [mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_82%,transparent_100%)]"
         >
-          <p className="bg-gradient-to-b from-[#880021] via-[#880021]/80 to-transparent bg-clip-text font-display text-[clamp(3.6rem,15.5vw,12.25rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.04em] text-transparent dark:from-[#e44c6f] dark:via-[#880021]/85 dark:to-transparent">
+          <p className="bg-gradient-to-b from-[#880021] via-[#880021]/80 to-transparent bg-clip-text font-display text-[clamp(2.85rem,15vw,12.25rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.04em] text-transparent dark:from-[#e44c6f] dark:via-[#880021]/85 dark:to-transparent">
             SERAPHIM
           </p>
         </div>

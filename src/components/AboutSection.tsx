@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { RotateCw } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { GlassRefraction } from './GlassRefraction';
 import { Magnetic } from './Magnetic';
 import { ScrollRevealSection } from './ScrollRevealSection';
 import { SectionHeaderReveal } from './SectionHeaderReveal';
@@ -110,7 +111,7 @@ export function AboutSection() {
             <div
               role="tablist"
               aria-label="About details view"
-              className="mb-4 inline-flex items-center gap-1 rounded-xl border border-black/12 bg-black/[0.03] p-1 dark:border-white/15 dark:bg-white/[0.04]"
+              className="glass-control mb-4 inline-flex items-center gap-1 rounded-full p-1"
             >
               {[
                 { id: 'profile' as const, label: 'Stack Matrix' },
@@ -124,9 +125,9 @@ export function AboutSection() {
                     role="tab"
                     aria-selected={isSelected}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`relative cursor-pointer rounded-lg px-3.5 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors ${
+                    className={`relative cursor-pointer rounded-full px-3.5 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors ${
                       isSelected
-                        ? 'text-[#ffffff] dark:text-[#000000]'
+                        ? 'text-[#ffffff] dark:text-[#ffffff]'
                         : 'text-black/70 hover:text-[#000000] dark:text-white/70 dark:hover:text-[#ffffff]'
                     }`}
                   >
@@ -135,7 +136,7 @@ export function AboutSection() {
                         layoutId="about-tab-pill"
                         transition={{ duration: 0.25, ease: EDITORIAL_EASE }}
                         aria-hidden="true"
-                        className="absolute inset-0 rounded-lg bg-[#000000] dark:bg-[#ffffff]"
+                        className="liquid-glass-btn-accent absolute inset-0"
                       />
                     )}
                     <span className="relative z-10">{tab.label}</span>
@@ -180,9 +181,10 @@ export function AboutSection() {
                   {DISCIPLINES.map((item) => (
                     <div
                       key={item.index}
-                      className="rounded-xl border border-black/10 bg-[#ffffff]/70 p-4 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#880021] dark:border-white/15 dark:bg-white/[0.03] dark:hover:border-[#d43b5c]"
+                      className="glass-card relative overflow-hidden rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#880021] dark:hover:border-[#d43b5c]"
                     >
-                      <div className="flex items-baseline gap-2.5">
+                      <GlassRefraction subtle />
+                      <div className="relative z-10 flex items-baseline gap-2.5">
                         <span className="font-display text-xs font-bold tabular-nums text-[#880021] dark:text-[#d43b5c]">
                           {item.index}.
                         </span>
@@ -190,7 +192,7 @@ export function AboutSection() {
                           {item.title}
                         </h3>
                       </div>
-                      <p className="mt-1.5 font-display text-xs leading-relaxed text-black/70 dark:text-white/75 sm:text-[13px]">
+                      <p className="relative z-10 mt-1.5 font-display text-xs leading-relaxed text-black/70 dark:text-white/75 sm:text-[13px]">
                         {item.detail}
                       </p>
                     </div>
@@ -231,12 +233,12 @@ export function AboutSection() {
                 mass: 0.9,
               }}
               style={{ transformStyle: 'preserve-3d' }}
-              className="relative h-full w-full"
+              className="relative h-full w-full will-change-transform"
             >
               {/* FRONT FACE: User-provided front studio portrait */}
               <div
                 style={{ backfaceVisibility: 'hidden' }}
-                className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl border border-black/15 bg-white shadow-[0_24px_54px_-18px_rgba(0,0,0,0.16)] dark:border-white/20 dark:bg-[#000000] dark:shadow-[0_24px_54px_-18px_rgba(0,0,0,0.75)]"
+                className="glass-card-3d absolute inset-0 h-full w-full overflow-hidden rounded-2xl"
               >
                 {!frontFailed ? (
                   <img
@@ -298,7 +300,7 @@ export function AboutSection() {
               <button
                 type="button"
                 onClick={() => setIsFlipped((prev) => !prev)}
-                className="inline-flex cursor-pointer items-center gap-1.5 font-display text-xs font-semibold text-[#880021] transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:text-[#d43b5c] dark:focus-visible:ring-[#d43b5c]"
+                className="liquid-glass-btn inline-flex cursor-pointer items-center gap-1.5 px-3.5 py-1.5 font-display text-xs font-semibold !text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:!text-[#d43b5c] dark:focus-visible:ring-[#d43b5c]"
               >
                 <RotateCw className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>{isFlipped ? 'Show Photo' : 'Flip Persona'}</span>

@@ -21,9 +21,9 @@ export function ScrollRevealSection({
       id={id}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.08 }}
+      viewport={{ once: true, amount: 0.02 }}
       transition={{
-        duration: 0.55,
+        duration: 0.45,
         delay,
         ease: SMOOTH_EASE,
       }}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 
 interface HelloIntroProps {
@@ -14,41 +14,57 @@ const DOOR_EASE = [0.76, 0, 0.24, 1] as const;
 export function HelloIntro({ onDoorsOpen, onComplete }: HelloIntroProps) {
   const prefersReducedMotion = useReducedMotion();
   const [doorsOpen, setDoorsOpen] = useState(false);
+  const openedRef = useRef(false);
+  const completedRef = useRef(false);
+
+  const doorDurationMs = prefersReducedMotion ? 220 : 550;
+
+  const triggerOpen = useCallback(() => {
+    if (openedRef.current) return;
+    openedRef.current = true;
+    setDoorsOpen(true);
+    onDoorsOpen();
+
+    window.setTimeout(() => {
+      if (completedRef.current) return;
+      completedRef.current = true;
+      document.body.style.overflow = '';
+      onComplete();
+    }, doorDurationMs);
+  }, [doorDurationMs, onComplete, onDoorsOpen]);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    const drawMs = prefersReducedMotion ? 350 : 3100;
-    const doorDurationMs = prefersReducedMotion ? 300 : 880;
+    const drawMs = prefersReducedMotion ? 250 : 1750;
+    const openTimer = window.setTimeout(triggerOpen, drawMs);
 
-    const openTimer = window.setTimeout(() => {
-      setDoorsOpen(true);
-      onDoorsOpen();
-    }, drawMs);
-
-    const finishTimer = window.setTimeout(() => {
-      document.body.style.overflow = previousOverflow;
-      onComplete();
-    }, drawMs + doorDurationMs);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' || event.key === ' ' || event.key === 'Enter') {
+        triggerOpen();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
       window.clearTimeout(openTimer);
-      window.clearTimeout(finishTimer);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onComplete, onDoorsOpen, prefersReducedMotion]);
+  }, [prefersReducedMotion, triggerOpen]);
 
-  const strokeDelay = prefersReducedMotion ? 0 : 0.08;
-  const strokeDuration = prefersReducedMotion ? 0.25 : 2.9;
-  const doorDuration = prefersReducedMotion ? 0.3 : 0.88;
+  const strokeDelay = prefersReducedMotion ? 0 : 0.05;
+  const strokeDuration = prefersReducedMotion ? 0.2 : 1.65;
+  const doorDuration = doorDurationMs / 1000;
 
   return (
     <div
       role="presentation"
       aria-label="Opening animation"
+      onClick={triggerOpen}
       className={`fixed inset-0 z-[100] overflow-hidden ${
-        doorsOpen ? 'pointer-events-none' : 'pointer-events-auto'
+        doorsOpen ? 'pointer-events-none' : 'pointer-events-auto cursor-pointer'
       }`}
     >
       {/* Left Double Door */}
@@ -56,7 +72,7 @@ export function HelloIntro({ onDoorsOpen, onComplete }: HelloIntroProps) {
         initial={{ x: '0%' }}
         animate={{ x: doorsOpen ? '-100%' : '0%' }}
         transition={{ duration: doorDuration, ease: DOOR_EASE }}
-        className="absolute inset-y-0 left-0 w-1/2 border-r border-white/15 bg-[#000000]"
+        className="absolute inset-y-0 left-0 w-1/2 border-r border-white/15 bg-[#000000] will-change-transform"
       />
 
       {/* Right Double Door */}
@@ -64,7 +80,7 @@ export function HelloIntro({ onDoorsOpen, onComplete }: HelloIntroProps) {
         initial={{ x: '0%' }}
         animate={{ x: doorsOpen ? '100%' : '0%' }}
         transition={{ duration: doorDuration, ease: DOOR_EASE }}
-        className="absolute inset-y-0 right-0 w-1/2 border-l border-white/15 bg-[#000000]"
+        className="absolute inset-y-0 right-0 w-1/2 border-l border-white/15 bg-[#000000] will-change-transform"
       />
 
       {/* Centered Bold Macintosh Skeletal "hello" SVG Stroke Reveal */}
@@ -74,7 +90,7 @@ export function HelloIntro({ onDoorsOpen, onComplete }: HelloIntroProps) {
           opacity: doorsOpen ? 0 : 1,
           scale: doorsOpen ? 0.96 : 1,
         }}
-        transition={{ duration: 0.28, ease: 'easeOut' }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
         className="pointer-events-none relative z-10 flex h-full w-full items-center justify-center px-6"
       >
         <svg

@@ -1,6 +1,7 @@
 import { useState, type MouseEvent } from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
+import { GlassRefraction } from './GlassRefraction';
 import { Magnetic } from './Magnetic';
 import { ScrollRevealSection } from './ScrollRevealSection';
 import { SectionHeaderReveal } from './SectionHeaderReveal';
@@ -138,7 +139,7 @@ export function FavoriteProjectSection() {
                   href="https://github.com/syedashal2008-sud"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#880021] px-5 py-2.5 font-display text-xs font-semibold text-[#ffffff] shadow-[0_10px_24px_-8px_rgba(136,0,33,0.45)] transition-colors duration-200 hover:bg-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-2 dark:hover:bg-[#ffffff] dark:hover:text-[#000000] dark:focus-visible:ring-[#d43b5c] whitespace-nowrap"
+                  className="liquid-glass-btn-accent group inline-flex min-h-[42px] items-center gap-2 px-5 py-2.5 font-display text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-2 dark:focus-visible:ring-[#d43b5c] whitespace-nowrap"
                 >
                   <span>View on GitHub</span>
                   <ArrowUpRight
@@ -152,7 +153,7 @@ export function FavoriteProjectSection() {
                 <a
                   href="#projects"
                   onClick={handleScrollToProjects}
-                  className="group inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-black/15 bg-transparent px-4 py-2.5 font-display text-xs font-semibold text-[#000000] transition-colors duration-200 hover:border-[#880021] hover:text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:border-white/20 dark:text-[#ffffff] dark:hover:border-[#d43b5c] dark:hover:text-[#d43b5c] whitespace-nowrap"
+                  className="liquid-glass-btn group inline-flex min-h-[42px] items-center gap-2 px-5 py-2.5 font-display text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] whitespace-nowrap"
                 >
                   <span>All Projects</span>
                   <ArrowDown
@@ -206,14 +207,15 @@ export function FavoriteProjectSection() {
                       damping: 24,
                       mass: 0.7,
                     }}
-                    className={`group absolute cursor-pointer overflow-hidden rounded-xl border text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-4 dark:focus-visible:ring-[#d43b5c] ${
+                    className={`glass-card group absolute cursor-pointer overflow-hidden rounded-xl text-left will-change-transform transition-[border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-4 dark:focus-visible:ring-[#d43b5c] ${
                       card.positionClassName
                     } ${
                       isActive
-                        ? 'border-[#880021] bg-[#ffffff] shadow-[0_28px_64px_-16px_rgba(0,0,0,0.28)] dark:border-[#d43b5c] dark:bg-[#0b0b0d] dark:shadow-[0_32px_70px_-14px_rgba(0,0,0,0.9)]'
-                        : 'border-black/15 bg-[#ffffff] shadow-[0_18px_42px_-16px_rgba(0,0,0,0.18)] hover:border-black/35 dark:border-white/15 dark:bg-[#0b0b0d] dark:shadow-[0_22px_50px_-16px_rgba(0,0,0,0.75)] dark:hover:border-white/35'
+                        ? '!border-[#880021] shadow-[0_28px_64px_-16px_rgba(0,0,0,0.28)] dark:!border-[#d43b5c] dark:shadow-[0_32px_70px_-14px_rgba(0,0,0,0.9)]'
+                        : 'hover:border-black/35 dark:hover:border-white/40'
                     }`}
                   >
+                    <GlassRefraction subtle />
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#111113]">
                       {!failedImages[idx] ? (
                         <img
@@ -239,7 +241,7 @@ export function FavoriteProjectSection() {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between gap-3 border-t border-black/10 bg-[#ffffff] px-3.5 py-2.5 dark:border-white/10 dark:bg-[#0b0b0d] sm:px-4 sm:py-3">
+                    <div className="relative z-10 flex items-center justify-between gap-3 border-t border-black/10 bg-white/65 px-3.5 py-2.5 backdrop-blur-sm dark:border-white/15 dark:bg-black/55 sm:px-4 sm:py-3">
                       <span className="truncate font-mono text-[11px] font-medium tracking-tight text-[#000000] dark:text-white/90 sm:text-xs">
                         {card.caption}
                       </span>

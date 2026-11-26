@@ -18,7 +18,7 @@ export function ThemeToggle({ tabIndex = 0, className = '' }: ThemeToggleProps) 
       aria-pressed={isDark}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className={`group inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-black/15 bg-black/[0.02] text-[#000000] transition-all duration-200 hover:border-[#880021] hover:bg-[#880021] hover:text-[#ffffff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-2 dark:border-white/20 dark:bg-white/[0.04] dark:text-[#ffffff] dark:hover:border-[#d43b5c] dark:hover:bg-[#880021] dark:hover:text-[#ffffff] dark:focus-visible:ring-[#d43b5c] dark:focus-visible:ring-offset-[#000000] ${className}`}
+      className={`liquid-glass-btn group inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-2 dark:focus-visible:ring-[#d43b5c] dark:focus-visible:ring-offset-[#000000] ${className}`}
     >
       <motion.span
         key={isDark ? 'sun' : 'moon'}

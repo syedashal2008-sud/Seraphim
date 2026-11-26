@@ -136,19 +136,37 @@ export function TestimonialsSection() {
               key={item.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.12 }}
+              viewport={{ once: true, amount: 0.05 }}
               transition={{
-                duration: 0.65,
-                delay: (idx % 4) * 0.08,
+                duration: 0.55,
+                delay: (idx % 4) * 0.06,
                 ease: EDITORIAL_EASE,
               }}
-              whileHover={{
-                y: -5,
-                transition: { duration: 0.25, ease: EDITORIAL_EASE },
-              }}
-              className="group relative flex flex-col justify-between rounded-2xl border border-white/15 bg-transparent p-5 shadow-[0_14px_34px_-14px_rgba(0,0,0,0.4)] ring-1 ring-white/10 backdrop-blur-[4px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-[#880021] hover:bg-[#880021]/25 hover:shadow-[0_20px_42px_-14px_rgba(136,0,33,0.45)] dark:bg-white/[0.03] dark:hover:border-[#d43b5c] dark:hover:bg-[#880021]/25 sm:p-6"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/22 bg-gradient-to-br from-white/[0.11] via-[#0d0d11]/72 to-white/[0.04] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.32),inset_0_-1px_0_rgba(255,255,255,0.08),0_24px_56px_-18px_rgba(0,0,0,0.88)] backdrop-blur-md transition-[transform,border-color,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:border-[#d43b5c] hover:from-[#880021]/28 hover:via-[#0d0d11]/74 hover:to-[#880021]/14 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.38),0_24px_54px_-14px_rgba(136,0,33,0.48)] sm:p-6"
             >
-              <div>
+              {/* Specular rim & zero-cost radial refracted orbs */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-white/55 to-transparent"
+              />
+              <span
+                aria-hidden="true"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(255,255,255,0.14) 0%, transparent 70%)',
+                }}
+                className="pointer-events-none absolute -top-12 right-0 h-32 w-36 rounded-full"
+              />
+              <span
+                aria-hidden="true"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
+                }}
+                className="pointer-events-none absolute -bottom-14 left-0 h-32 w-40 rounded-full"
+              />
+
+              <div className="relative z-10">
                 {/* Top Row: Five-Star Rating & Subtle Quote Icon */}
                 <div className="flex items-center justify-between gap-4">
                   <div
@@ -179,7 +197,7 @@ export function TestimonialsSection() {
               </div>
 
               {/* Client Profile Footer */}
-              <div className="mt-6 flex items-center gap-3.5 border-t border-white/15 pt-4">
+              <div className="relative z-10 mt-6 flex items-center gap-3.5 border-t border-white/15 pt-4">
                 <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full border border-white/25 bg-[#000000] transition-transform duration-300 group-hover:scale-105 group-hover:border-[#ffffff]">
                   {!failedAvatars[item.id] ? (
                     <img

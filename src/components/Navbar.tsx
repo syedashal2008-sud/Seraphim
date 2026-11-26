@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { BrandLogo } from './BrandLogo';
 import { Magnetic } from './Magnetic';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -136,41 +137,53 @@ export function Navbar() {
         isVisible ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
-      <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-xl border border-black/15 bg-gradient-to-br from-white/70 via-white/50 to-white/30 text-[#000000] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),inset_0_-1px_0_rgba(0,0,0,0.06),0_20px_50px_-14px_rgba(0,0,0,0.2)] backdrop-blur-2xl backdrop-saturate-150 transition-colors duration-300 dark:border-white/25 dark:from-white/[0.11] dark:via-[#0d0d11]/65 dark:to-white/[0.04] dark:text-[#ffffff] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.34),inset_0_-1px_0_rgba(255,255,255,0.08),0_22px_56px_-14px_rgba(0,0,0,0.92)]">
-        {/* Specular glass rim & soft refracted depth orbs */}
+      <div className="glass-surface relative mx-auto w-full max-w-6xl overflow-hidden rounded-xl text-[#000000] transition-colors duration-300 dark:text-[#ffffff]">
+        {/* Specular glass rim & zero-cost refracted depth orbs */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/85 to-transparent dark:via-white/55"
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -top-10 left-10 h-24 w-44 rounded-full bg-white/70 blur-2xl dark:bg-white/[0.14]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(255,255,255,0.45) 0%, transparent 70%)',
+          }}
+          className="pointer-events-none absolute -top-14 left-6 h-32 w-52 rounded-full dark:opacity-25"
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-10 right-20 h-24 w-52 rounded-full bg-[#880021]/10 blur-2xl dark:bg-white/[0.10]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(136,0,33,0.12) 0%, transparent 70%)',
+          }}
+          className="pointer-events-none absolute -bottom-14 right-14 h-32 w-60 rounded-full"
         />
 
         <nav
           aria-label="Primary navigation"
           className="relative z-10 flex h-[60px] w-full items-center justify-between gap-4 px-5 sm:px-6"
         >
-          {/* Minimalist Brand Mark */}
+          {/* Minimalist Brand Mark: logo-only in compact view, logo + wordmark when expanded */}
           <Magnetic strength={0.28} proximity={24} maxOffset={8} disabled={!isVisible}>
             <a
               href="#hero"
               tabIndex={isVisible ? 0 : -1}
               onClick={(e) => handleNavigate(e, '#hero')}
-              className="inline-flex shrink-0 items-baseline gap-2 whitespace-nowrap text-[#000000] transition-opacity duration-200 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-4 dark:text-[#ffffff] dark:focus-visible:ring-[#d43b5c]"
+              aria-label="Ashal Abbas · Seraphim — Back to top"
+              className="inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[#000000] transition-opacity duration-200 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-4 dark:text-[#ffffff] dark:focus-visible:ring-[#d43b5c]"
             >
-              <span className="font-display text-sm font-bold tracking-[-0.02em] sm:text-[15px]">
-                Ashal Abbas
-              </span>
-              <span aria-hidden="true" className="font-bold text-[#880021] dark:text-[#d43b5c]">
-                ·
-              </span>
-              <span className="font-serif text-base italic text-[#880021] dark:text-[#d43b5c] sm:text-lg">
-                Seraphim
+              <BrandLogo className="h-10 w-10 shrink-0 lg:h-9 lg:w-9" />
+              <span className="hidden items-baseline gap-2 lg:inline-flex">
+                <span className="font-display text-sm font-bold tracking-[-0.02em] sm:text-[15px]">
+                  Ashal Abbas
+                </span>
+                <span aria-hidden="true" className="font-bold text-[#880021] dark:text-[#d43b5c]">
+                  ·
+                </span>
+                <span className="font-serif text-base italic text-[#880021] dark:text-[#d43b5c] sm:text-lg">
+                  Seraphim
+                </span>
               </span>
             </a>
           </Magnetic>
@@ -227,7 +240,7 @@ export function Navbar() {
               aria-expanded={isMobileOpen}
               aria-controls="mobile-navigation-drawer"
               aria-label={isMobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-black/15 bg-white/30 text-[#000000] transition-colors duration-200 hover:border-[#880021] hover:text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:border-white/25 dark:bg-white/[0.06] dark:text-[#ffffff] dark:hover:border-[#d43b5c] dark:hover:text-[#d43b5c] dark:focus-visible:ring-[#d43b5c] lg:hidden"
+              className="liquid-glass-btn inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] lg:hidden"
             >
               {isMobileOpen ? (
                 <X className="h-4 w-4" aria-hidden="true" />

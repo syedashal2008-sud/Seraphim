@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { GlassRefraction } from './GlassRefraction';
 import { Magnetic } from './Magnetic';
 import { ScrollRevealSection } from './ScrollRevealSection';
 import { SectionHeaderReveal } from './SectionHeaderReveal';
@@ -556,7 +557,7 @@ function ProjectCarousel({
                 type="button"
                 onClick={goToPrev}
                 aria-label={`Previous slide for ${projectTitle}`}
-                className={`group/btn inline-flex cursor-pointer items-center justify-center rounded-lg border border-[#000000] bg-[#000000] text-[#ffffff] transition-all duration-200 hover:border-[#880021] hover:bg-[#880021] hover:text-[#ffffff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:border-[#ffffff] dark:bg-[#ffffff] dark:text-[#000000] dark:hover:border-[#880021] dark:hover:bg-[#880021] dark:hover:text-[#ffffff] dark:focus-visible:ring-[#d43b5c] ${
+                className={`liquid-glass-btn group/btn inline-flex cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] ${
                   compact ? 'h-8 w-8' : 'h-10 w-10'
                 }`}
               >
@@ -569,7 +570,7 @@ function ProjectCarousel({
                 type="button"
                 onClick={goToNext}
                 aria-label={`Next slide for ${projectTitle}`}
-                className={`group/btn inline-flex cursor-pointer items-center justify-center rounded-lg border border-[#000000] bg-[#000000] text-[#ffffff] transition-all duration-200 hover:border-[#880021] hover:bg-[#880021] hover:text-[#ffffff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:border-[#ffffff] dark:bg-[#ffffff] dark:text-[#000000] dark:hover:border-[#880021] dark:hover:bg-[#880021] dark:hover:text-[#ffffff] dark:focus-visible:ring-[#d43b5c] ${
+                className={`liquid-glass-btn group/btn inline-flex cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] ${
                   compact ? 'h-8 w-8' : 'h-10 w-10'
                 }`}
               >
@@ -625,7 +626,7 @@ export function ProjectsSection() {
           <div
             role="tablist"
             aria-label="Filter projects by stack"
-            className="inline-flex flex-wrap items-center gap-1 rounded-xl border border-black/12 bg-black/[0.03] p-1 dark:border-white/15 dark:bg-white/[0.04]"
+            className="glass-control inline-flex flex-wrap items-center gap-1 rounded-full p-1"
           >
             {FILTER_OPTIONS.map((filter) => {
               const isSelected = activeFilter === filter;
@@ -640,9 +641,9 @@ export function ProjectsSection() {
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => setActiveFilter(filter)}
-                  className={`relative cursor-pointer rounded-lg px-3.5 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors ${
+                  className={`relative cursor-pointer rounded-full px-3.5 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors ${
                     isSelected
-                      ? 'text-[#ffffff] dark:text-[#000000]'
+                      ? 'text-[#ffffff]'
                       : 'text-black/70 hover:text-[#000000] dark:text-white/70 dark:hover:text-[#ffffff]'
                   }`}
                 >
@@ -651,7 +652,7 @@ export function ProjectsSection() {
                       layoutId="projects-filter-pill"
                       transition={{ duration: 0.25, ease: EDITORIAL_EASE }}
                       aria-hidden="true"
-                      className="absolute inset-0 rounded-lg bg-[#000000] dark:bg-[#ffffff]"
+                      className="liquid-glass-btn-accent absolute inset-0"
                     />
                   )}
                   <span className="relative z-10">
@@ -668,22 +669,22 @@ export function ProjectsSection() {
         </div>
 
         {/* Curated 2-Column Editorial Showcase Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10"
-        >
-          <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeFilter}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.24, ease: EDITORIAL_EASE }}
+            className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10"
+          >
             {visibleProjects.map((project) => (
-              <motion.article
+              <article
                 key={project.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97 }}
-                transition={{ duration: 0.4, ease: EDITORIAL_EASE }}
-                className="group/card flex flex-col justify-between rounded-2xl border border-black/12 bg-[#ffffff]/70 p-5 shadow-[0_18px_46px_-22px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#880021] hover:shadow-[0_26px_54px_-22px_rgba(136,0,33,0.22)] dark:border-white/15 dark:bg-white/[0.03] dark:shadow-[0_18px_46px_-22px_rgba(0,0,0,0.75)] dark:hover:border-[#d43b5c] dark:hover:shadow-[0_26px_54px_-22px_rgba(136,0,33,0.42)] sm:p-7"
+                className="glass-card group/card relative flex flex-col justify-between overflow-hidden rounded-2xl p-5 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[#880021] hover:shadow-[0_26px_54px_-22px_rgba(136,0,33,0.22)] dark:hover:border-[#d43b5c] dark:hover:shadow-[0_26px_54px_-22px_rgba(136,0,33,0.42)] sm:p-7"
               >
-                <div>
+                <GlassRefraction subtle />
+                <div className="relative z-10">
                   <div className="mb-4 flex items-center justify-between gap-3 text-xs text-black/65 dark:text-white/70">
                     <div className="flex items-center gap-2">
                       <span className="font-bold tabular-nums text-[#880021] dark:text-[#d43b5c]">
@@ -716,7 +717,7 @@ export function ProjectsSection() {
                   </div>
                 </div>
 
-                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-black/15 pt-4 dark:border-white/20">
+                <div className="relative z-10 mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-black/15 pt-4 dark:border-white/20">
                   <span className="font-display text-xs font-medium text-black/65 dark:text-white/70">
                     {project.stack}
                   </span>
@@ -725,7 +726,7 @@ export function ProjectsSection() {
                     <button
                       type="button"
                       onClick={() => setSelectedProject(project)}
-                      className="group inline-flex cursor-pointer items-center gap-1.5 font-display text-xs font-semibold text-[#880021] transition-colors hover:text-[#000000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:text-[#d43b5c] dark:hover:text-[#ffffff] dark:focus-visible:ring-[#d43b5c] whitespace-nowrap"
+                      className="liquid-glass-btn group inline-flex cursor-pointer items-center gap-1.5 px-3.5 py-1.5 font-display text-xs font-semibold !text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:!text-[#d43b5c] dark:focus-visible:ring-[#d43b5c] whitespace-nowrap"
                     >
                       <span>Case Study</span>
                       <ArrowUpRight
@@ -735,10 +736,10 @@ export function ProjectsSection() {
                     </button>
                   </Magnetic>
                 </div>
-              </motion.article>
+              </article>
             ))}
-          </AnimatePresence>
-        </motion.div>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Case Study Detail Modal */}
@@ -761,9 +762,10 @@ export function ProjectsSection() {
               exit={{ opacity: 0, y: 12, scale: 0.98 }}
               transition={{ duration: 0.28, ease: EDITORIAL_EASE }}
               onClick={(e) => e.stopPropagation()}
-              className="max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-black/15 bg-[#ffffff] p-6 text-[#000000] shadow-2xl dark:border-white/20 dark:bg-[#080808] dark:text-[#ffffff] sm:p-8"
+              className="glass-surface relative max-h-[90dvh] w-full max-w-3xl overflow-y-auto overflow-x-hidden rounded-2xl p-6 text-[#000000] dark:text-[#ffffff] sm:p-8"
             >
-              <div className="mb-6 flex items-start justify-between gap-4 border-b border-black/15 pb-4 dark:border-white/20">
+              <GlassRefraction />
+              <div className="relative z-10 mb-6 flex items-start justify-between gap-4 border-b border-black/15 pb-4 dark:border-white/20">
                 <div>
                   <div className="flex items-center gap-2 font-display text-xs text-black/60 dark:text-white/65">
                     <span className="font-bold tabular-nums text-[#880021] dark:text-[#d43b5c]">
@@ -789,7 +791,7 @@ export function ProjectsSection() {
                   type="button"
                   onClick={() => setSelectedProject(null)}
                   aria-label="Close case study"
-                  className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-black/15 text-[#000000] transition-colors hover:border-[#880021] hover:bg-[#880021] hover:text-[#ffffff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:border-white/20 dark:text-[#ffffff] dark:hover:border-[#d43b5c] dark:hover:bg-[#880021]"
+                  className="liquid-glass-btn inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
                 >
                   <X className="h-4 w-4" aria-hidden="true" />
                 </button>

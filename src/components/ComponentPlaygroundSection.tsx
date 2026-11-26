@@ -9,6 +9,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { GlassRefraction } from './GlassRefraction';
 import { Magnetic } from './Magnetic';
 import { ScrollRevealSection } from './ScrollRevealSection';
 import { SectionHeaderReveal } from './SectionHeaderReveal';
@@ -230,7 +231,7 @@ function ColorControl({
 
         <label
           htmlFor={pickerId}
-          className="inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-lg border border-black/15 bg-black/[0.03] px-2 font-display text-[11px] font-medium text-black/75 transition-colors hover:border-[#880021] dark:border-white/20 dark:bg-white/[0.05] dark:text-white/80 dark:hover:border-[#d43b5c]"
+          className="liquid-glass-btn inline-flex h-7 cursor-pointer items-center gap-1.5 px-2.5 font-display text-[11px] font-medium"
         >
           <input
             id={pickerId}
@@ -342,9 +343,10 @@ function PlaygroundCardShell({
   };
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-black/12 bg-[#ffffff]/80 shadow-[0_22px_54px_-22px_rgba(0,0,0,0.12)] backdrop-blur-md transition-colors duration-300 hover:border-[#880021]/60 dark:border-white/15 dark:bg-[#08080a]/85 dark:shadow-[0_24px_60px_-22px_rgba(0,0,0,0.8)] dark:hover:border-[#d43b5c]/60">
+    <article className="glass-card relative overflow-hidden rounded-2xl transition-colors duration-300 hover:border-[#880021]/60 dark:hover:border-[#d43b5c]/60">
+      <GlassRefraction />
       {/* Card Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/12 px-5 py-4 dark:border-white/15 sm:px-7 sm:py-5">
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 border-b border-black/12 px-5 py-4 dark:border-white/15 sm:px-7 sm:py-5">
         <div>
           <h3 className="font-display text-lg font-bold tracking-[-0.02em] text-[#000000] dark:text-[#ffffff] sm:text-xl">
             {title}
@@ -358,7 +360,7 @@ function PlaygroundCardShell({
           <div
             role="tablist"
             aria-label={`${title} mode`}
-            className="inline-flex items-center gap-1 rounded-xl border border-black/12 bg-black/[0.03] p-1 dark:border-white/15 dark:bg-white/[0.04]"
+            className="glass-control inline-flex items-center gap-1 rounded-full p-1"
           >
             {(
               [
@@ -375,9 +377,9 @@ function PlaygroundCardShell({
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => setViewMode(tab.id)}
-                  className={`relative inline-flex min-h-[34px] cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] ${
+                  className={`relative inline-flex min-h-[34px] cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] ${
                     isSelected
-                      ? 'text-[#ffffff] dark:text-[#000000]'
+                      ? 'text-[#ffffff]'
                       : 'text-black/70 hover:text-[#000000] dark:text-white/70 dark:hover:text-[#ffffff]'
                   }`}
                 >
@@ -386,7 +388,7 @@ function PlaygroundCardShell({
                       layoutId={`playground-tab-${idSuffix}`}
                       transition={{ duration: 0.24, ease: EDITORIAL_EASE }}
                       aria-hidden="true"
-                      className="absolute inset-0 rounded-lg bg-[#000000] dark:bg-[#ffffff]"
+                      className="liquid-glass-btn-accent absolute inset-0"
                     />
                   )}
                   <Icon className="relative z-10 h-3.5 w-3.5" aria-hidden="true" />
@@ -400,7 +402,7 @@ function PlaygroundCardShell({
             type="button"
             onClick={handleCopy}
             aria-label={`Copy code for ${title}`}
-            className="inline-flex min-h-[40px] cursor-pointer items-center gap-1.5 rounded-xl border border-black/15 bg-transparent px-3.5 py-2 font-display text-xs font-semibold text-[#000000] transition-colors duration-200 hover:border-[#880021] hover:text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:border-white/20 dark:text-[#ffffff] dark:hover:border-[#d43b5c] dark:hover:text-[#d43b5c] whitespace-nowrap"
+            className="liquid-glass-btn inline-flex min-h-[40px] cursor-pointer items-center gap-1.5 px-4 py-2 font-display text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] whitespace-nowrap"
           >
             {copied ? (
               <Check className="h-3.5 w-3.5 text-[#880021] dark:text-[#d43b5c]" aria-hidden="true" />
@@ -421,10 +423,10 @@ function PlaygroundCardShell({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="grid grid-cols-1 lg:grid-cols-12"
+            className="relative z-10 grid grid-cols-1 lg:grid-cols-12"
           >
             {/* Interactive Controls Panel */}
-            <div className="order-2 flex flex-col justify-between gap-5 border-t border-black/12 p-5 dark:border-white/15 sm:p-7 lg:order-1 lg:col-span-5 lg:border-r lg:border-t-0">
+            <div className="order-2 flex min-w-0 flex-col justify-between gap-5 border-t border-black/12 p-4 dark:border-white/15 sm:p-7 lg:order-1 lg:col-span-5 lg:border-r lg:border-t-0">
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between border-b border-black/10 pb-2.5 dark:border-white/10">
                   <span className="inline-flex items-center gap-1.5 font-display text-xs font-semibold tracking-wide text-black/65 dark:text-white/70">
@@ -435,7 +437,7 @@ function PlaygroundCardShell({
                     type="button"
                     onClick={onReset}
                     aria-label={`Reset ${title} controls`}
-                    className="inline-flex cursor-pointer items-center gap-1 font-display text-[11px] font-medium text-black/60 transition-colors hover:text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:text-white/60 dark:hover:text-[#d43b5c]"
+                    className="liquid-glass-btn inline-flex cursor-pointer items-center gap-1 px-2.5 py-1 font-display text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
                   >
                     <RotateCcw className="h-3 w-3" aria-hidden="true" />
                     <span>Reset</span>
@@ -447,7 +449,7 @@ function PlaygroundCardShell({
             </div>
 
             {/* Live Preview Stage */}
-            <div className="order-1 flex min-h-[300px] items-center justify-center p-6 sm:min-h-[350px] sm:p-8 lg:order-2 lg:col-span-7">
+            <div className="order-1 flex min-h-[260px] min-w-0 items-center justify-center p-4 sm:min-h-[350px] sm:p-8 lg:order-2 lg:col-span-7">
               {preview}
             </div>
           </motion.div>
@@ -539,7 +541,7 @@ export function ComponentPlaygroundSection() {
                     onChange={(e) =>
                       setBtnConfig((prev) => ({ ...prev, label: e.target.value }))
                     }
-                    className="rounded-lg border border-black/15 bg-transparent px-3 py-2 font-display text-xs font-medium text-[#000000] focus:border-[#880021] focus:outline-none dark:border-white/20 dark:text-[#ffffff] dark:focus:border-[#d43b5c]"
+                    className="glass-input rounded-lg px-3 py-2 font-display text-xs font-medium"
                   />
                 </div>
 
@@ -590,10 +592,10 @@ export function ComponentPlaygroundSection() {
                 <div
                   aria-hidden="true"
                   style={{
-                    backgroundColor: btnConfig.color,
-                    opacity: (btnConfig.glow / 100) * 0.34,
+                    background: `radial-gradient(circle, ${btnConfig.color} 0%, transparent 70%)`,
+                    opacity: (btnConfig.glow / 100) * 0.48,
                   }}
-                  className="pointer-events-none absolute h-32 w-56 rounded-full blur-3xl transition-opacity duration-200"
+                  className="pointer-events-none absolute h-44 w-64 rounded-full transition-opacity duration-200"
                 />
 
                 <Magnetic
@@ -654,7 +656,7 @@ export function ComponentPlaygroundSection() {
                   <div
                     role="tablist"
                     aria-label="Glass card surface theme"
-                    className="inline-flex w-full items-center gap-1 rounded-xl border border-black/12 bg-black/[0.03] p-1 dark:border-white/15 dark:bg-white/[0.04]"
+                    className="glass-control inline-flex w-full items-center gap-1 rounded-full p-1"
                   >
                     {(['dark', 'light'] as const).map((surface) => {
                       const isSelected = glassConfig.surfaceMode === surface;
@@ -667,9 +669,9 @@ export function ComponentPlaygroundSection() {
                           onClick={() =>
                             setGlassConfig((prev) => ({ ...prev, surfaceMode: surface }))
                           }
-                          className={`relative flex-1 cursor-pointer rounded-lg px-3 py-1.5 font-display text-xs font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
+                          className={`relative flex-1 cursor-pointer rounded-full px-3 py-1.5 font-display text-xs font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
                             isSelected
-                              ? 'text-[#ffffff] dark:text-[#000000]'
+                              ? 'text-[#ffffff]'
                               : 'text-black/70 hover:text-[#000000] dark:text-white/70 dark:hover:text-[#ffffff]'
                           }`}
                         >
@@ -678,7 +680,7 @@ export function ComponentPlaygroundSection() {
                               layoutId="pg-glass-surface"
                               transition={{ duration: 0.22, ease: EDITORIAL_EASE }}
                               aria-hidden="true"
-                              className="absolute inset-0 rounded-lg bg-[#000000] dark:bg-[#ffffff]"
+                              className="liquid-glass-btn-accent absolute inset-0"
                             />
                           )}
                           <span className="relative z-10">{surface} Glass</span>
@@ -824,7 +826,7 @@ export function ComponentPlaygroundSection() {
                   <div
                     role="tablist"
                     aria-label="Chart dataset metric"
-                    className="inline-flex w-full flex-wrap items-center gap-1 rounded-xl border border-black/12 bg-black/[0.03] p-1 dark:border-white/15 dark:bg-white/[0.04]"
+                    className="glass-control inline-flex w-full flex-wrap items-center gap-1 rounded-full p-1"
                   >
                     {(
                       [
@@ -843,9 +845,9 @@ export function ComponentPlaygroundSection() {
                           onClick={() =>
                             setWidgetConfig((prev) => ({ ...prev, metric: m.id }))
                           }
-                          className={`relative flex-1 cursor-pointer rounded-lg px-2.5 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
+                          className={`relative flex-1 cursor-pointer rounded-full px-2.5 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
                             isSelected
-                              ? 'text-[#ffffff] dark:text-[#000000]'
+                              ? 'text-[#ffffff]'
                               : 'text-black/70 hover:text-[#000000] dark:text-white/70 dark:hover:text-[#ffffff]'
                           }`}
                         >
@@ -854,7 +856,7 @@ export function ComponentPlaygroundSection() {
                               layoutId="pg-widget-metric"
                               transition={{ duration: 0.22, ease: EDITORIAL_EASE }}
                               aria-hidden="true"
-                              className="absolute inset-0 rounded-lg bg-[#000000] dark:bg-[#ffffff]"
+                              className="liquid-glass-btn-accent absolute inset-0"
                             />
                           )}
                           <span className="relative z-10">{m.label}</span>
@@ -871,7 +873,7 @@ export function ComponentPlaygroundSection() {
                   <div
                     role="tablist"
                     aria-label="Animation curve preset"
-                    className="inline-flex w-full items-center gap-1 rounded-xl border border-black/12 bg-black/[0.03] p-1 dark:border-white/15 dark:bg-white/[0.04]"
+                    className="glass-control inline-flex w-full items-center gap-1 rounded-full p-1"
                   >
                     {(
                       [
@@ -889,9 +891,9 @@ export function ComponentPlaygroundSection() {
                           onClick={() =>
                             setWidgetConfig((prev) => ({ ...prev, curve: curve.id }))
                           }
-                          className={`relative flex-1 cursor-pointer rounded-lg px-3 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
+                          className={`relative flex-1 cursor-pointer rounded-full px-3 py-1.5 font-display text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
                             isSelected
-                              ? 'text-[#ffffff] dark:text-[#000000]'
+                              ? 'text-[#ffffff]'
                               : 'text-black/70 hover:text-[#000000] dark:text-white/70 dark:hover:text-[#ffffff]'
                           }`}
                         >
@@ -900,7 +902,7 @@ export function ComponentPlaygroundSection() {
                               layoutId="pg-widget-curve"
                               transition={{ duration: 0.22, ease: EDITORIAL_EASE }}
                               aria-hidden="true"
-                              className="absolute inset-0 rounded-lg bg-[#000000] dark:bg-[#ffffff]"
+                              className="liquid-glass-btn-accent absolute inset-0"
                             />
                           )}
                           <span className="relative z-10">{curve.label}</span>
@@ -934,9 +936,10 @@ export function ComponentPlaygroundSection() {
               </>
             }
             preview={
-              <div className="w-full max-w-md rounded-2xl border border-black/12 bg-[#ffffff] p-5 shadow-[0_18px_46px_-20px_rgba(0,0,0,0.14)] dark:border-white/15 dark:bg-[#0d0d10] dark:shadow-[0_18px_46px_-20px_rgba(0,0,0,0.8)] sm:p-6">
+              <div className="glass-card relative w-full max-w-md overflow-hidden rounded-2xl p-5 sm:p-6">
+                <GlassRefraction subtle />
                 {/* Interactive Widget Header: Micro-Toggle + Period Switcher */}
-                <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
                     <button
                       type="button"
@@ -971,7 +974,7 @@ export function ComponentPlaygroundSection() {
                   <div
                     role="tablist"
                     aria-label="Chart period"
-                    className="inline-flex items-center gap-1 rounded-xl border border-black/12 bg-black/[0.03] p-1 dark:border-white/15 dark:bg-white/[0.04]"
+                    className="glass-control inline-flex items-center gap-1 rounded-full p-1"
                   >
                     {(['monthly', 'quarterly'] as const).map((period) => {
                       const isSelected = widgetConfig.period === period;
@@ -984,9 +987,9 @@ export function ComponentPlaygroundSection() {
                           onClick={() =>
                             setWidgetConfig((prev) => ({ ...prev, period }))
                           }
-                          className={`relative cursor-pointer rounded-lg px-2.5 py-1 font-display text-[11px] font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
+                          className={`relative cursor-pointer rounded-full px-3 py-1 font-display text-[11px] font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] ${
                             isSelected
-                              ? 'text-[#ffffff] dark:text-[#000000]'
+                              ? 'text-[#ffffff]'
                               : 'text-black/65 hover:text-[#000000] dark:text-white/65 dark:hover:text-[#ffffff]'
                           }`}
                         >
@@ -995,7 +998,7 @@ export function ComponentPlaygroundSection() {
                               layoutId="pg-widget-period"
                               transition={barTransition}
                               aria-hidden="true"
-                              className="absolute inset-0 rounded-lg bg-[#000000] dark:bg-[#ffffff]"
+                              className="liquid-glass-btn-accent absolute inset-0"
                             />
                           )}
                           <span className="relative z-10">{period}</span>
@@ -1006,7 +1009,7 @@ export function ComponentPlaygroundSection() {
                 </div>
 
                 {/* Metric Summary Readout */}
-                <div className="mt-5 flex items-baseline justify-between gap-4 border-b border-black/10 pb-4 dark:border-white/10">
+                <div className="relative z-10 mt-5 flex items-baseline justify-between gap-4 border-b border-black/10 pb-4 dark:border-white/10">
                   <div>
                     <p className="font-display text-xs text-black/60 dark:text-white/60">
                       {activeDataset.title}
@@ -1026,7 +1029,7 @@ export function ComponentPlaygroundSection() {
                 </div>
 
                 {/* Compositor-Only Animated Bar Chart */}
-                <div className="mt-5 grid h-36 grid-cols-6 items-end gap-2.5 sm:gap-3">
+                <div className="relative z-10 mt-5 grid h-36 grid-cols-6 items-end gap-1.5 sm:gap-3">
                   {activeSeries.map((bar, idx) => {
                     const isHighlighted = hoveredBar === idx;
                     const ratio = Math.max(0.14, bar.value / maxBarValue);
@@ -1039,11 +1042,11 @@ export function ComponentPlaygroundSection() {
                         onFocus={() => setHoveredBar(idx)}
                         onBlur={() => setHoveredBar(null)}
                         aria-label={`${bar.label}: ${bar.display}`}
-                        className="group flex h-full cursor-pointer flex-col items-center justify-end gap-1.5 focus-visible:outline-none"
+                        className="group flex h-full min-w-0 cursor-pointer flex-col items-center justify-end gap-1.5 focus-visible:outline-none"
                       >
                         {widgetConfig.showValues && (
                           <span
-                            className={`font-mono text-[10px] font-semibold tabular-nums transition-opacity duration-150 ${
+                            className={`font-mono text-[9px] font-semibold tabular-nums transition-opacity duration-150 sm:text-[10px] ${
                               isHighlighted
                                 ? 'text-[#000000] opacity-100 dark:text-[#ffffff]'
                                 : 'text-black/55 opacity-75 dark:text-white/55'

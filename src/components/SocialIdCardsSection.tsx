@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { QRCodeSVG } from 'qrcode.react';
+import { GlassRefraction } from './GlassRefraction';
 import { Magnetic } from './Magnetic';
 import { SectionHeaderReveal } from './SectionHeaderReveal';
 
@@ -122,8 +123,9 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
           animationDuration: `${card.swayDuration}s`,
           animationDelay: `${orderIndex * -1.4}s`,
         }}
-        className="animate-card-sway flex w-full flex-col items-center transition-transform duration-300 ease-out hover:-translate-y-2"
+        className="animate-card-sway flex w-full flex-col items-center"
       >
+        <div className="flex w-full flex-col items-center transition-transform duration-300 ease-out hover:-translate-y-2">
         {/* Vertical lanyard cord + metallic clasp */}
         <div
           aria-hidden="true"
@@ -145,16 +147,17 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
               mass: 0.9,
             }}
             style={{ transformStyle: 'preserve-3d' }}
-            className="relative h-full w-full"
+            className="relative h-full w-full will-change-transform"
           >
-            {/* FRONT FACE: Sleek frosted glass card with centered brand icon + platform name */}
+            {/* FRONT FACE: Sleek 3D glass card with centered brand icon + platform name */}
             <div
               style={{ backfaceVisibility: 'hidden' }}
               aria-hidden={isFlipped}
-              className={`absolute inset-0 flex flex-col items-center justify-between rounded-2xl border border-black/15 bg-[#ffffff]/70 px-6 py-7 text-[#000000] shadow-[0_20px_48px_-18px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04] backdrop-blur-md transition-all duration-300 group-hover:border-[#880021] group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.24)] dark:border-white/15 dark:bg-white/[0.03] dark:text-[#ffffff] dark:shadow-[0_20px_48px_-18px_rgba(0,0,0,0.7)] dark:ring-white/10 dark:group-hover:border-[#d43b5c] dark:group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.45)] ${
+              className={`glass-card-3d absolute inset-0 flex flex-col items-center justify-between overflow-hidden rounded-2xl px-6 py-7 text-[#000000] transition-[border-color,box-shadow] duration-300 group-hover:border-[#880021] group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.24)] dark:text-[#ffffff] dark:group-hover:border-[#d43b5c] dark:group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.45)] ${
                 isFlipped ? 'pointer-events-none' : 'pointer-events-auto'
               }`}
             >
+              <GlassRefraction subtle />
               <button
                 type="button"
                 tabIndex={isFlipped ? -1 : 0}
@@ -187,10 +190,11 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
                 transform: 'rotateY(180deg)',
               }}
               aria-hidden={!isFlipped}
-              className={`absolute inset-0 flex flex-col items-center justify-between rounded-2xl border border-black/15 bg-[#ffffff]/85 p-6 text-[#000000] shadow-[0_20px_48px_-18px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04] backdrop-blur-md transition-all duration-300 group-hover:border-[#880021] group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.24)] dark:border-white/15 dark:bg-white/[0.04] dark:text-[#ffffff] dark:shadow-[0_20px_48px_-18px_rgba(0,0,0,0.7)] dark:ring-white/10 dark:group-hover:border-[#d43b5c] dark:group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.45)] ${
+              className={`glass-card-3d absolute inset-0 flex flex-col items-center justify-between overflow-hidden rounded-2xl p-4 text-[#000000] transition-[border-color,box-shadow] duration-300 group-hover:border-[#880021] group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.24)] dark:text-[#ffffff] dark:group-hover:border-[#d43b5c] dark:group-hover:shadow-[0_28px_56px_-18px_rgba(136,0,33,0.45)] sm:p-5 lg:p-6 ${
                 isFlipped ? 'pointer-events-auto' : 'pointer-events-none'
               }`}
             >
+              <GlassRefraction subtle />
               <button
                 type="button"
                 tabIndex={isFlipped ? 0 : -1}
@@ -206,13 +210,14 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
               />
 
               {/* High-Contrast QR Code with quiet zone for reliable phone scanning */}
-              <div className="pointer-events-none relative z-10 rounded-xl border border-black/10 bg-[#ffffff] p-3 shadow-sm">
+              <div className="pointer-events-none relative z-10 rounded-xl border border-black/10 bg-[#ffffff] p-2.5 shadow-sm lg:p-3">
                 <QRCodeSVG
                   value={card.qrValue}
-                  size={144}
+                  size={132}
                   bgColor="#ffffff"
                   fgColor="#000000"
                   level="M"
+                  className="h-[116px] w-[116px] sm:h-[128px] sm:w-[128px] lg:h-[144px] lg:w-[144px]"
                 />
               </div>
 
@@ -231,7 +236,7 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       tabIndex={isFlipped ? 0 : -1}
-                      className="relative z-20 inline-flex items-center gap-1 font-display text-[11px] font-semibold tracking-tight text-[#000000] underline decoration-black/30 underline-offset-4 transition-colors hover:text-[#880021] hover:decoration-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:text-[#ffffff] dark:decoration-white/30 dark:hover:text-[#d43b5c] dark:hover:decoration-[#d43b5c] dark:focus-visible:ring-[#d43b5c]"
+                      className="liquid-glass-btn relative z-20 inline-flex items-center gap-1 px-3.5 py-1.5 font-display text-[11px] font-semibold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
                     >
                       <span>Open {card.platform}</span>
                       <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
@@ -241,6 +246,7 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
               </div>
             </div>
           </motion.div>
+        </div>
         </div>
       </div>
     </motion.div>
@@ -266,7 +272,7 @@ export function SocialIdCardsSection() {
 
         {/* Architectural hanging rail */}
         <div className="md:border-t md:border-black/15 dark:md:border-white/20">
-          <div className="grid grid-cols-1 gap-14 md:grid-cols-3 md:gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-5 lg:gap-12">
             {SOCIAL_CARDS.map((card, index) => (
               <HangingIdCard key={card.id} card={card} orderIndex={index} />
             ))}

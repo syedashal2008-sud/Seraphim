@@ -1,0 +1,106 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-poster: "Bebas Neue Pro", "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
+  --color-surface: #ffffff;
+  --color-ink: #000000;
+  --color-burgundy: #880021;
+}
+
+@layer base {
+  html {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html.dark {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: #ffffff;
+    color: #000000;
+    overflow-x: hidden;
+    transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html.dark body {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  ::selection {
+    background-color: #880021;
+    color: #ffffff;
+  }
+
+  section[id],
+  footer[id] {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes card-sway {
+  0%,
+  100% {
+    transform: rotate(-1.4deg);
+  }
+  50% {
+    transform: rotate(1.4deg);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.animate-card-sway {
+  animation: card-sway 5.8s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-card-sway:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-card-sway {
+    animation: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active body,
+  html.custom-cursor-active a,
+  html.custom-cursor-active button,
+  html.custom-cursor-active [role="button"],
+  html.custom-cursor-active [role="tab"] {
+    cursor: none !important;
+  }
+
+  html.custom-cursor-active input,
+  html.custom-cursor-active textarea {
+    cursor: text !important;
+  }
+}

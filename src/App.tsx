@@ -72,8 +72,12 @@ function PortfolioApp() {
     setIntroDone(true);
   }, []);
 
-  // Preload below-the-fold section chunks cleanly after initial paint so scroll targets are ready immediately.
+  // Preload project chunk & compressed project images immediately on open so they are cached before scrolling.
   useEffect(() => {
+    void import('./components/ProjectsSection').then((m) => {
+      m.preloadProjectImages();
+    });
+
     const preload = () => {
       void loadSocialIdCards();
       void loadTechStackMarquee();

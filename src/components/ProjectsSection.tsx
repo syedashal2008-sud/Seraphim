@@ -244,21 +244,21 @@ const PROJECTS: ProjectItem[] = [
     ],
     slides: [
       {
-        src: '/src/assets/images/p6_kinetix_mockup_1795672347583.jpg',
-        alt: 'Kinetix Client Portal support ticket dashboard on a studio monitor mockup',
+        src: '/assets/aistudio/image_1cde68a3.png',
+        alt: 'Kinetix Client Portal support ticket and SLA dashboard on a studio laptop mockup',
         caption: 'Support & SLA Console',
         kind: 'Mockup',
       },
       {
-        src: '/src/assets/images/p6_screen_tickets_1795672223212.jpg',
-        alt: 'Kinetix Client Portal SLA ticket priority queue screenshot',
-        caption: 'SLA Priority Queue',
+        src: '/assets/aistudio/image_2bf88880.png',
+        alt: 'Kinetix Client Portal account settings and notification preferences screenshot',
+        caption: 'Account & Security Settings',
         kind: 'Screenshot',
       },
       {
-        src: '/src/assets/images/p6_screen_thread_1795672327357.jpg',
-        alt: 'Kinetix Client Portal ticket conversation and SLA timeline screenshot',
-        caption: 'Ticket Resolution Workspace',
+        src: '/assets/aistudio/image_5f23c317.png',
+        alt: 'Kinetix Client Portal searchable knowledge base and help articles screenshot',
+        caption: 'Knowledge Base Center',
         kind: 'Screenshot',
       },
     ],
@@ -282,21 +282,21 @@ const PROJECTS: ProjectItem[] = [
     ],
     slides: [
       {
-        src: '/src/assets/images/p7_solstice_mockup_1795672586571.jpg',
-        alt: 'Solstice Lookbook website displayed on a matte-silver studio laptop mockup',
+        src: '/assets/aistudio/image_12f919ab.png',
+        alt: 'Solstice Lookbook website displayed on a studio laptop mockup',
         caption: 'Editorial Hero Display',
         kind: 'Mockup',
       },
       {
-        src: '/src/assets/images/p7_screen_lookbook_1795672586782.jpg',
-        alt: 'Solstice Lookbook asymmetric photography grid web interface screenshot',
-        caption: 'Asymmetric CSS Grid Gallery',
+        src: '/assets/aistudio/image_c4987ae4.png',
+        alt: 'Solstice Lookbook About Solstice architectural editorial layout screenshot',
+        caption: 'About Solstice Editorial',
         kind: 'Screenshot',
       },
       {
-        src: '/src/assets/images/p7_screen_archive_1795672587485.jpg',
-        alt: 'Solstice Lookbook interactive dark exhibition timeline screenshot',
-        caption: 'Exhibition Archive Timeline',
+        src: '/assets/aistudio/image_1bb09ace.png',
+        alt: 'Solstice Lookbook filterable architectural masonry gallery screenshot',
+        caption: 'Asymmetric CSS Grid Gallery',
         kind: 'Screenshot',
       },
     ],
@@ -320,21 +320,21 @@ const PROJECTS: ProjectItem[] = [
     ],
     slides: [
       {
-        src: '/src/assets/images/p8_meridian_mockup_1795672587989.jpg',
-        alt: 'Meridian Design System displayed on a frameless studio monitor mockup',
+        src: '/assets/aistudio/image_b14abe2a.png',
+        alt: 'Meridian Design System displayed across monitor, laptop, tablet, and phone devices',
         caption: 'Design System Display',
         kind: 'Mockup',
       },
       {
-        src: '/src/assets/images/p8_screen_components_1795672588836.jpg',
-        alt: 'Meridian Bootstrap 12-column grid builder and component library screenshot',
-        caption: 'Bootstrap Grid & UI Kit',
+        src: '/assets/aistudio/image_97b69115.png',
+        alt: 'Meridian interactive JavaScript project quote and scope estimator screenshot',
+        caption: 'Interactive Quote Estimator',
         kind: 'Screenshot',
       },
       {
-        src: '/src/assets/images/p8_screen_estimator_1795672588541.jpg',
-        alt: 'Meridian interactive JavaScript project quote estimator screenshot',
-        caption: 'Interactive Quote Estimator',
+        src: '/assets/aistudio/image_b082f283.png',
+        alt: 'Meridian typography, color system, 8pt grid, and component library screenshot',
+        caption: 'Bootstrap Grid & UI Kit',
         kind: 'Screenshot',
       },
     ],
@@ -358,21 +358,21 @@ const PROJECTS: ProjectItem[] = [
     ],
     slides: [
       {
-        src: '/src/assets/images/p9_vanguard_mockup_1795672589375.jpg',
-        alt: 'Vanguard Finance Ledger accounting dashboard on a matte-black laptop mockup',
+        src: '/assets/aistudio/image_a4078a25.png',
+        alt: 'Vanguard Finance Ledger accounting dashboard on a studio laptop mockup',
         caption: 'Accounting Dashboard',
         kind: 'Mockup',
       },
       {
-        src: '/src/assets/images/p9_screen_ledger_1795672589489.jpg',
-        alt: 'Vanguard Finance Ledger general ledger transactions table screenshot',
+        src: '/assets/aistudio/image_2d6d34eb.png',
+        alt: 'Vanguard Finance Ledger double-entry journal entry and transactions table screenshot',
         caption: 'General Ledger Table',
         kind: 'Screenshot',
       },
       {
-        src: '/src/assets/images/p9_screen_reports_1795672609847.jpg',
-        alt: 'Vanguard Finance Ledger quarterly cashflow and tax summary reports screenshot',
-        caption: 'Cashflow & Tax Reports',
+        src: '/assets/aistudio/image_79610a27.png',
+        alt: 'Vanguard Finance Ledger financial role permissions and activity console screenshot',
+        caption: 'Financial Roles & Audit',
         kind: 'Screenshot',
       },
     ],
@@ -396,26 +396,61 @@ const PROJECTS: ProjectItem[] = [
     ],
     slides: [
       {
-        src: '/src/assets/images/p10_aegis_mockup_1795672626337.jpg',
-        alt: 'Aegis Auth and Telemetry API gateway console on a studio monitor mockup',
-        caption: 'API Gateway Overview',
+        src: '/assets/aistudio/image_e621b124.png',
+        alt: 'Aegis Auth and Telemetry active device sessions console on a studio laptop mockup',
+        caption: 'Active Sessions Overview',
         kind: 'Mockup',
       },
       {
-        src: '/src/assets/images/p10_screen_tokens_1795672611941.jpg',
-        alt: 'Aegis Auth and Telemetry active JWT session manager screenshot',
-        caption: 'JWT Session Manager',
+        src: '/assets/aistudio/image_3b024516.png',
+        alt: 'Aegis Auth and Telemetry real-time latency, traffic, and HTTP error telemetry dashboard screenshot',
+        caption: 'Telemetry & Latency Metrics',
         kind: 'Screenshot',
       },
       {
-        src: '/src/assets/images/p10_screen_audit_1795672629387.jpg',
-        alt: 'Aegis Auth and Telemetry MySQL API request audit log screenshot',
-        caption: 'MySQL Audit & Latency Log',
+        src: '/assets/aistudio/image_5f545740.png',
+        alt: 'Aegis Auth and Telemetry authentication requests, MFA adoption, and security health console screenshot',
+        caption: 'Auth & Security Health',
         kind: 'Screenshot',
       },
     ],
   },
 ];
+
+function getFastProjectWebp(src: string): string | null {
+  const match = src.match(/^\/assets\/aistudio\/(image_[a-f0-9]+)\.png$/i);
+  return match ? `/assets/projects/${match[1]}.webp` : null;
+}
+
+let projectImagesPreloaded = false;
+
+export function preloadProjectImages(): void {
+  if (projectImagesPreloaded || typeof window === 'undefined') return;
+  projectImagesPreloaded = true;
+
+  const preloadUrl = (src: string) => {
+    const url = getFastProjectWebp(src) ?? src;
+    const img = new window.Image();
+    img.decoding = 'async';
+    img.src = url;
+  };
+
+  // Priority 1: first visible slide of every project card
+  for (const project of PROJECTS) {
+    if (project.slides[0]) {
+      preloadUrl(project.slides[0].src);
+    }
+  }
+
+  // Priority 2: remaining carousel slides staggered slightly after initial covers
+  window.setTimeout(() => {
+    for (const project of PROJECTS) {
+      for (let i = 1; i < project.slides.length; i++) {
+        preloadUrl(project.slides[i].src);
+      }
+    }
+  }, 250);
+}
 
 function ProjectCarousel({
   slides,
@@ -489,17 +524,26 @@ function ProjectCarousel({
             className="absolute inset-0 h-full w-full"
           >
             {!failedSlides[activeIndex] ? (
-              <img
-                src={currentSlide.src}
-                alt={currentSlide.alt}
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                decoding="async"
-                onError={() =>
-                  setFailedSlides((prev) => ({ ...prev, [activeIndex]: true }))
-                }
-                className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/frame:scale-[1.03]"
-              />
+              <picture className="block h-full w-full">
+                {getFastProjectWebp(currentSlide.src) && (
+                  <source
+                    srcSet={getFastProjectWebp(currentSlide.src) ?? undefined}
+                    type="image/webp"
+                  />
+                )}
+                <img
+                  src={currentSlide.src}
+                  alt={currentSlide.alt}
+                  referrerPolicy="no-referrer"
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority={activeIndex === 0 ? 'high' : 'auto'}
+                  onError={() =>
+                    setFailedSlides((prev) => ({ ...prev, [activeIndex]: true }))
+                  }
+                  className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/frame:scale-[1.03]"
+                />
+              </picture>
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center bg-[#000000] p-6 text-center text-white">
                 <span className="font-display text-lg font-bold">

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { ArrowUpRight, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { useState } from 'react';
+import { Play } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { GlassRefraction } from './GlassRefraction';
 import { Magnetic } from './Magnetic';
+import { ProjectLiveExperienceModal } from './ProjectLiveExperienceModal';
 import { ScrollRevealSection } from './ScrollRevealSection';
 import { SectionHeaderReveal } from './SectionHeaderReveal';
 
@@ -435,193 +436,71 @@ export function preloadProjectImages(): void {
     img.src = url;
   };
 
-  // Priority 1: first visible slide of every project card
+  // Preload the front cover image of every project card
   for (const project of PROJECTS) {
     if (project.slides[0]) {
       preloadUrl(project.slides[0].src);
     }
   }
-
-  // Priority 2: remaining carousel slides staggered slightly after initial covers
-  window.setTimeout(() => {
-    for (const project of PROJECTS) {
-      for (let i = 1; i < project.slides.length; i++) {
-        preloadUrl(project.slides[i].src);
-      }
-    }
-  }, 250);
 }
 
-function ProjectCarousel({
-  slides,
+function ProjectCoverImage({
+  slide,
   projectTitle,
-  compact = false,
+  onOpenLive,
 }: {
-  slides: CarouselSlide[];
+  slide?: CarouselSlide;
   projectTitle: string;
-  compact?: boolean;
+  onOpenLive: () => void;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const [isPaused, setIsPaused] = useState(false);
-  const [failedSlides, setFailedSlides] = useState<Record<number, boolean>>({});
-  const prefersReducedMotion = useReducedMotion();
-
-  const totalSlides = slides.length;
-  const currentSlide = slides[activeIndex];
-
-  useEffect(() => {
-    if (prefersReducedMotion || isPaused || totalSlides <= 1) return;
-    const timer = window.setInterval(() => {
-      setDirection(1);
-      setActiveIndex((prev) => (prev + 1) % totalSlides);
-    }, 5200);
-    return () => window.clearInterval(timer);
-  }, [isPaused, prefersReducedMotion, totalSlides]);
-
-  const goToPrev = () => {
-    setDirection(-1);
-    setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-  };
-
-  const goToNext = () => {
-    setDirection(1);
-    setActiveIndex((prev) => (prev + 1) % totalSlides);
-  };
-
-  const goToIndex = (index: number) => {
-    if (index === activeIndex) return;
-    setDirection(index > activeIndex ? 1 : -1);
-    setActiveIndex(index);
-  };
+  const [hasError, setHasError] = useState(false);
 
   return (
-    <div
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
-      className="w-full"
-    >
-      {/* Landscape 16:9 Carousel Frame */}
+    <div className="w-full">
       <div className="group/frame relative aspect-video w-full overflow-hidden rounded-xl border border-black/12 bg-white transition-colors duration-300 hover:border-[#880021] dark:border-white/15 dark:bg-[#000000] dark:hover:border-[#d43b5c]">
-        <AnimatePresence initial={false} mode="popLayout" custom={direction}>
-          <motion.div
-            key={activeIndex}
-            custom={direction}
-            initial={
-              prefersReducedMotion
-                ? { opacity: 0 }
-                : { opacity: 0, x: direction > 0 ? 36 : -36 }
-            }
-            animate={{ opacity: 1, x: 0 }}
-            exit={
-              prefersReducedMotion
-                ? { opacity: 0 }
-                : { opacity: 0, x: direction > 0 ? -36 : 36 }
-            }
-            transition={{ duration: 0.45, ease: EDITORIAL_EASE }}
-            className="absolute inset-0 h-full w-full"
-          >
-            {!failedSlides[activeIndex] ? (
-              <picture className="block h-full w-full">
-                {getFastProjectWebp(currentSlide.src) && (
-                  <source
-                    srcSet={getFastProjectWebp(currentSlide.src) ?? undefined}
-                    type="image/webp"
-                  />
-                )}
-                <img
-                  src={currentSlide.src}
-                  alt={currentSlide.alt}
-                  referrerPolicy="no-referrer"
-                  loading="eager"
-                  decoding="async"
-                  fetchPriority={activeIndex === 0 ? 'high' : 'auto'}
-                  onError={() =>
-                    setFailedSlides((prev) => ({ ...prev, [activeIndex]: true }))
-                  }
-                  className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/frame:scale-[1.03]"
-                />
-              </picture>
-            ) : (
-              <div className="flex h-full w-full flex-col items-center justify-center bg-[#000000] p-6 text-center text-white">
-                <span className="font-display text-lg font-bold">
-                  {projectTitle}
-                </span>
-                <span className="mt-1 font-serif text-base italic text-white/75">
-                  {currentSlide.caption}
-                </span>
-              </div>
+        {slide && !hasError ? (
+          <picture className="block h-full w-full">
+            {getFastProjectWebp(slide.src) && (
+              <source
+                srcSet={getFastProjectWebp(slide.src) ?? undefined}
+                type="image/webp"
+              />
             )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Minimalist Carousel Controls Bar */}
-      <div className="mt-3 flex items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-2 text-xs text-black/65 dark:text-white/70">
-          <span className="shrink-0 tabular-nums font-bold text-[#880021] dark:text-[#d43b5c]">
-            0{activeIndex + 1} / 0{totalSlides}
-          </span>
-          <span aria-hidden="true" className="font-bold text-[#880021] dark:text-[#d43b5c]">·</span>
-          <span className="shrink-0 font-medium text-[#000000] dark:text-[#ffffff]">
-            {currentSlide.kind}
-          </span>
-          <span aria-hidden="true" className="text-black/35 dark:text-white/35">·</span>
-          <span className="truncate">{currentSlide.caption}</span>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2.5">
-          <div className="flex items-center gap-1.5" role="tablist" aria-label={`${projectTitle} slides`}>
-            {slides.map((slide, idx) => (
-              <button
-                key={slide.caption}
-                type="button"
-                role="tab"
-                aria-selected={idx === activeIndex}
-                aria-label={`Show slide ${idx + 1}: ${slide.caption}`}
-                onClick={() => goToIndex(idx)}
-                className="flex h-6 cursor-pointer items-center px-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
-              >
-                <span
-                  className={`block h-[2px] transition-all duration-300 ${
-                    idx === activeIndex
-                      ? 'w-5 bg-[#880021] dark:bg-[#d43b5c]'
-                      : 'w-2.5 bg-black/20 hover:bg-black/50 dark:bg-white/25 dark:hover:bg-white/60'
-                  }`}
-                />
-              </button>
-            ))}
+            <img
+              src={slide.src}
+              alt={slide.alt}
+              referrerPolicy="no-referrer"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              onError={() => setHasError(true)}
+              className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/frame:scale-[1.03]"
+            />
+          </picture>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center bg-[#000000] p-6 text-center text-white">
+            <span className="font-display text-lg font-bold">
+              {projectTitle}
+            </span>
           </div>
+        )}
 
-          <div className="flex items-center gap-1.5">
-            <Magnetic strength={0.3} proximity={22} maxOffset={6}>
-              <button
-                type="button"
-                onClick={goToPrev}
-                aria-label={`Previous slide for ${projectTitle}`}
-                className={`liquid-glass-btn group/btn inline-flex cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] ${
-                  compact ? 'h-8 w-8' : 'h-10 w-10'
-                }`}
-              >
-                <ChevronLeft className="h-4 w-4 transition-transform duration-200 group-hover/btn:-translate-x-0.5" aria-hidden="true" />
-              </button>
-            </Magnetic>
-
-            <Magnetic strength={0.3} proximity={22} maxOffset={6}>
-              <button
-                type="button"
-                onClick={goToNext}
-                aria-label={`Next slide for ${projectTitle}`}
-                className={`liquid-glass-btn group/btn inline-flex cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] ${
-                  compact ? 'h-8 w-8' : 'h-10 w-10'
-                }`}
-              >
-                <ChevronRight className="h-4 w-4 transition-transform duration-200 group-hover/btn:translate-x-0.5" aria-hidden="true" />
-              </button>
-            </Magnetic>
-          </div>
+        {/* Bottom-Right Live Experience Trigger */}
+        <div className="absolute bottom-3 right-3 z-10">
+          <Magnetic strength={0.3} proximity={30} maxOffset={7}>
+            <button
+              type="button"
+              onClick={onOpenLive}
+              aria-label={`Unveil live experience for ${projectTitle}`}
+              className="group/live inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-white/30 bg-black/75 px-3.5 py-1.5 font-display text-xs font-semibold text-white shadow-[0_10px_24px_-6px_rgba(0,0,0,0.65)] backdrop-blur-md transition-[background-color,border-color,transform,box-shadow] duration-200 hover:border-[#d43b5c] hover:bg-[#880021] hover:shadow-[0_12px_28px_-6px_rgba(136,0,33,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d43b5c] active:scale-[0.97]"
+            >
+              <Play
+                className="h-3 w-3 fill-current transition-transform duration-200 group-hover/live:scale-110"
+                aria-hidden="true"
+              />
+              <span>Unveil</span>
+            </button>
+          </Magnetic>
         </div>
       </div>
     </div>
@@ -630,23 +509,12 @@ function ProjectCarousel({
 
 export function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>('All');
-  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [liveProject, setLiveProject] = useState<ProjectItem | null>(null);
 
   const visibleProjects =
     activeFilter === 'All'
       ? PROJECTS
       : PROJECTS.filter((project) => project.filterGroup === activeFilter);
-
-  useEffect(() => {
-    if (!selectedProject) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setSelectedProject(null);
-      }
-    };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [selectedProject]);
 
   return (
     <ScrollRevealSection
@@ -742,10 +610,10 @@ export function ProjectsSection() {
                     <span className="tabular-nums font-medium">{project.year}</span>
                   </div>
 
-                  <ProjectCarousel
-                    slides={project.slides}
+                  <ProjectCoverImage
+                    slide={project.slides[0]}
                     projectTitle={project.title}
-                    compact
+                    onOpenLive={() => setLiveProject(project)}
                   />
 
                   <div className="mt-6">
@@ -763,22 +631,11 @@ export function ProjectsSection() {
 
                 <div className="relative z-10 mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-black/15 pt-4 dark:border-white/20">
                   <span className="font-display text-xs font-medium text-black/65 dark:text-white/70">
+                    Created On:
+                  </span>
+                  <span className="font-display text-xs font-medium text-black/65 dark:text-white/70 text-right">
                     {project.stack}
                   </span>
-
-                  <Magnetic strength={0.34} proximity={36} maxOffset={9}>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedProject(project)}
-                      className="liquid-glass-btn group inline-flex cursor-pointer items-center gap-1.5 px-3.5 py-1.5 font-display text-xs font-semibold !text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:!text-[#d43b5c] dark:focus-visible:ring-[#d43b5c] whitespace-nowrap"
-                    >
-                      <span>Case Study</span>
-                      <ArrowUpRight
-                        className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </Magnetic>
                 </div>
               </article>
             ))}
@@ -786,111 +643,10 @@ export function ProjectsSection() {
         </AnimatePresence>
       </div>
 
-      {/* Case Study Detail Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm sm:p-6"
-          >
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="case-study-title"
-              initial={{ opacity: 0, y: 18, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 12, scale: 0.98 }}
-              transition={{ duration: 0.28, ease: EDITORIAL_EASE }}
-              onClick={(e) => e.stopPropagation()}
-              className="glass-surface relative max-h-[90dvh] w-full max-w-3xl overflow-y-auto overflow-x-hidden rounded-2xl p-6 text-[#000000] dark:text-[#ffffff] sm:p-8"
-            >
-              <GlassRefraction />
-              <div className="relative z-10 mb-6 flex items-start justify-between gap-4 border-b border-black/15 pb-4 dark:border-white/20">
-                <div>
-                  <div className="flex items-center gap-2 font-display text-xs text-black/60 dark:text-white/65">
-                    <span className="font-bold tabular-nums text-[#880021] dark:text-[#d43b5c]">
-                      {selectedProject.index}
-                    </span>
-                    <span aria-hidden="true">·</span>
-                    <span>{selectedProject.category}</span>
-                    <span aria-hidden="true">·</span>
-                    <span className="tabular-nums">{selectedProject.year}</span>
-                  </div>
-                  <h3
-                    id="case-study-title"
-                    className="mt-1.5 font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl"
-                  >
-                    {selectedProject.title}
-                  </h3>
-                  <p className="mt-0.5 font-serif text-lg italic text-[#880021] dark:text-[#d43b5c]">
-                    {selectedProject.subtitle}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedProject(null)}
-                  aria-label="Close case study"
-                  className="liquid-glass-btn inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
-                >
-                  <X className="h-4 w-4" aria-hidden="true" />
-                </button>
-              </div>
-
-              <ProjectCarousel
-                slides={selectedProject.slides}
-                projectTitle={selectedProject.title}
-              />
-
-              <p className="mt-6 font-display text-sm leading-[1.75] text-black/80 dark:text-white/85 sm:text-[15px]">
-                {selectedProject.description}
-              </p>
-
-              <div className="mt-6 grid grid-cols-1 gap-4 border-t border-black/15 pt-5 dark:border-white/20 sm:grid-cols-2">
-                <div>
-                  <p className="font-display text-xs font-medium text-black/60 dark:text-white/60">
-                    Architecture
-                  </p>
-                  <p className="mt-1 font-display text-sm font-semibold">
-                    {selectedProject.architecture}
-                  </p>
-                </div>
-                <div>
-                  <p className="font-display text-xs font-medium text-black/60 dark:text-white/60">
-                    Technology Stack
-                  </p>
-                  <p className="mt-1 font-display text-sm font-semibold">
-                    {selectedProject.stack}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 border-t border-black/15 pt-5 dark:border-white/20">
-                <p className="font-display text-xs font-medium text-black/60 dark:text-white/60">
-                  Key Engineering Outcomes
-                </p>
-                <ul className="mt-3 flex flex-col gap-2">
-                  {selectedProject.highlights.map((highlight) => (
-                    <li
-                      key={highlight}
-                      className="flex items-baseline gap-2.5 font-display text-sm text-black/85 dark:text-white/85"
-                    >
-                      <span aria-hidden="true" className="font-bold text-[#880021] dark:text-[#d43b5c]">
-                        ·
-                      </span>
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <ProjectLiveExperienceModal
+        project={liveProject}
+        onClose={() => setLiveProject(null)}
+      />
     </ScrollRevealSection>
   );
 }

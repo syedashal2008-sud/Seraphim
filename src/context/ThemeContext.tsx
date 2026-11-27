@@ -17,12 +17,12 @@ interface ThemeContextValue {
   setTheme: (theme: ThemeMode) => void;
 }
 
-const STORAGE_KEY = 'seraphim-portfolio-theme';
+const STORAGE_KEY = 'seraphim-portfolio-theme-v2';
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getInitialTheme(): ThemeMode {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored === 'dark' || stored === 'light') {
@@ -31,7 +31,7 @@ function getInitialTheme(): ThemeMode {
   } catch {
     // Ignore storage access errors in restricted environments
   }
-  return 'light';
+  return 'dark';
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

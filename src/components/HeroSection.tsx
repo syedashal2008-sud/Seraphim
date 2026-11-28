@@ -6,10 +6,10 @@ import { Magnetic } from './Magnetic';
 const PORTFOLIO_LETTERS = ['P', 'O', 'R', 'T', 'F', 'O', 'L', 'I', 'O'] as const;
 
 const HERO_JUMP_LINKS = [
-  { index: '01', label: 'About', href: '#about' },
-  { index: '02', label: 'Projects', href: '#projects' },
-  { index: '03', label: 'Skills', href: '#skills' },
-  { index: '04', label: 'Playground', href: '#sandbox' },
+  { index: '01', label: 'About', href: '#about', desktopOnly: false },
+  { index: '02', label: 'Projects', href: '#projects', desktopOnly: false },
+  { index: '03', label: 'Skills', href: '#skills', desktopOnly: false },
+  { index: '04', label: 'Playground', href: '#sandbox', desktopOnly: true },
 ] as const;
 
 const EDITORIAL_EASE = [0.16, 1, 0.3, 1] as const;
@@ -35,7 +35,7 @@ export function HeroSection() {
     <section
       id="hero"
       aria-label="Hero"
-      className="relative z-[2] flex min-h-dvh w-full flex-col justify-between overflow-hidden bg-transparent px-4 py-6 text-[#000000] transition-colors duration-300 dark:text-[#ffffff] sm:px-12 sm:py-10 lg:px-20"
+      className="relative z-[2] flex min-h-dvh w-full flex-col justify-between overflow-hidden bg-transparent px-4 pb-24 pt-6 text-[#000000] transition-colors duration-300 dark:text-[#ffffff] sm:px-12 sm:pb-24 sm:pt-10 md:py-10 lg:px-20"
     >
       {/* Subtle Ambient Radial Spotlight behind Hero Typography */}
       <div
@@ -48,26 +48,27 @@ export function HeroSection() {
         initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.15, ease: EDITORIAL_EASE }}
-        className="relative z-[1] mx-auto flex w-full max-w-6xl items-center justify-between gap-3 border-b border-black/10 pb-4 font-display text-[11px] text-black/65 dark:border-white/15 dark:text-white/70 sm:gap-4 sm:text-xs"
+        className="relative z-[1] mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2.5 border-b border-black/10 pb-3.5 font-display text-[11px] text-black/65 dark:border-white/15 dark:text-white/70 sm:flex-nowrap sm:gap-4 sm:pb-4 sm:text-xs"
       >
-        <div className="flex shrink-0 items-center">
+        <div className="order-1 flex shrink-0 items-center">
           <span className="font-semibold whitespace-nowrap text-[#000000] dark:text-[#ffffff]">
             Seraphim Dev, Des
           </span>
         </div>
 
-        <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-2.5 gap-y-1.5 tabular-nums">
-          <div className="flex flex-wrap items-center justify-end gap-x-2 gap-y-0.5">
-            <span className="whitespace-nowrap">Full-Stack Web Engineering</span>
-            <span aria-hidden="true" className="text-[#880021] dark:text-[#d43b5c]">
-              ·
-            </span>
-            <span className="whitespace-nowrap">2–3 Years Experience</span>
-          </div>
-          <span aria-hidden="true" className="hidden text-[#880021] dark:text-[#d43b5c] sm:inline">
+        <div className="order-3 flex w-full items-center justify-between gap-x-2 border-t border-black/10 pt-2 tabular-nums dark:border-white/10 sm:order-2 sm:ml-auto sm:w-auto sm:justify-end sm:border-t-0 sm:pt-0">
+          <span className="whitespace-nowrap">Full-Stack Web Engineering</span>
+          <span aria-hidden="true" className="text-[#880021] dark:text-[#d43b5c]">
             ·
           </span>
-          <div className="flex shrink-0 items-center gap-2">
+          <span className="whitespace-nowrap">2–3 Years Experience</span>
+        </div>
+
+        <span aria-hidden="true" className="hidden text-[#880021] dark:text-[#d43b5c] sm:order-3 sm:inline">
+          ·
+        </span>
+
+        <div className="order-2 flex shrink-0 items-center gap-2 sm:order-4">
           <Magnetic strength={0.35} proximity={34} maxOffset={9}>
             <a
               href="#contact"
@@ -114,7 +115,6 @@ export function HeroSection() {
               </span>
             </a>
           </Magnetic>
-          </div>
         </div>
       </motion.div>
 
@@ -190,28 +190,44 @@ export function HeroSection() {
       >
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           {HERO_JUMP_LINKS.map((item) => (
-            <Magnetic key={item.href} strength={0.28} proximity={20} maxOffset={7}>
-              <a
-                href={item.href}
-                onClick={(e) => handleJump(e, item.href)}
-                className="group relative inline-flex items-baseline gap-1.5 py-0.5 whitespace-nowrap font-display text-xs text-black/65 transition-colors hover:text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:text-white/65 dark:hover:text-[#d43b5c] dark:focus-visible:ring-[#d43b5c]"
-              >
-                <span className="font-semibold tabular-nums text-[#880021] dark:text-[#d43b5c]">
-                  {item.index}
-                </span>
-                <span className="font-medium text-[#000000] transition-transform duration-200 group-hover:translate-x-0.5 dark:text-[#ffffff]">
-                  {item.label}
-                </span>
-              </a>
-            </Magnetic>
+            <div
+              key={item.href}
+              className={item.desktopOnly ? 'hidden md:inline-block' : 'inline-block'}
+            >
+              <Magnetic strength={0.28} proximity={20} maxOffset={7}>
+                <a
+                  href={item.href}
+                  onClick={(e) => handleJump(e, item.href)}
+                  className="group relative inline-flex items-baseline gap-1.5 py-0.5 whitespace-nowrap font-display text-xs text-black/65 transition-colors hover:text-[#880021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:text-white/65 dark:hover:text-[#d43b5c] dark:focus-visible:ring-[#d43b5c]"
+                >
+                  <span className="font-semibold tabular-nums text-[#880021] dark:text-[#d43b5c]">
+                    {item.index}
+                  </span>
+                  <span className="font-medium text-[#000000] transition-transform duration-200 group-hover:translate-x-0.5 dark:text-[#ffffff]">
+                    {item.label}
+                  </span>
+                </a>
+              </Magnetic>
+            </div>
           ))}
         </div>
 
         <Magnetic strength={0.35} proximity={42} maxOffset={11}>
           <a
+            href="#projects"
+            onClick={(e) => handleJump(e, '#projects')}
+            className="liquid-glass-btn group inline-flex items-center gap-2 px-4 py-1.5 whitespace-nowrap font-display text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] md:hidden"
+          >
+            <span>Explore Projects</span>
+            <ArrowDown
+              className="h-3.5 w-3.5 text-[#880021] transition-transform duration-200 group-hover:translate-y-0.5 dark:text-[#d43b5c]"
+              aria-hidden="true"
+            />
+          </a>
+          <a
             href="#connect"
             onClick={(e) => handleJump(e, '#connect')}
-            className="liquid-glass-btn group inline-flex items-center gap-2 px-4 py-1.5 whitespace-nowrap font-display text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c]"
+            className="liquid-glass-btn group hidden items-center gap-2 px-4 py-1.5 whitespace-nowrap font-display text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] dark:focus-visible:ring-[#d43b5c] md:inline-flex"
           >
             <span>Explore Portfolio</span>
             <ArrowDown

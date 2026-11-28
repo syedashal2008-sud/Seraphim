@@ -137,7 +137,11 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
         </div>
 
         {/* 3D Flip ID Card */}
-        <div className="group relative -mt-1 h-[360px] w-full max-w-[268px] [perspective:1200px] sm:h-[380px]">
+        <div
+          onMouseEnter={() => setIsFlipped(true)}
+          onMouseLeave={() => setIsFlipped(false)}
+          className="group relative -mt-1 h-[360px] w-full max-w-[268px] [perspective:1200px] sm:h-[380px]"
+        >
           <motion.div
             animate={{ rotateY: isFlipped ? 180 : 0 }}
             transition={{
@@ -161,7 +165,7 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
               <button
                 type="button"
                 tabIndex={isFlipped ? -1 : 0}
-                onClick={() => setIsFlipped(true)}
+                onClick={() => setIsFlipped((prev) => !prev)}
                 aria-label={`Flip ${card.platform} ID card for ${card.handle} to view QR code`}
                 className="absolute inset-0 z-0 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-4 dark:focus-visible:ring-[#d43b5c]"
               />
@@ -198,7 +202,7 @@ function HangingIdCard({ card, orderIndex }: HangingCardProps) {
               <button
                 type="button"
                 tabIndex={isFlipped ? 0 : -1}
-                onClick={() => setIsFlipped(false)}
+                onClick={() => setIsFlipped((prev) => !prev)}
                 aria-label={`Flip ${card.platform} ID card back to front view`}
                 className="absolute inset-0 z-0 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#880021] focus-visible:ring-offset-4 dark:focus-visible:ring-[#d43b5c]"
               />
@@ -263,7 +267,7 @@ export function SocialIdCardsSection() {
       <div className="mx-auto w-full max-w-5xl">
         <SectionHeaderReveal
           title="Direct Channels"
-          subtitle="Tap any hanging badge to reveal its scannable QR code"
+          subtitle="Hover or tap any hanging badge to reveal its scannable QR code"
           layout="split"
           className="mb-10"
           titleClassName="font-display text-xl font-bold tracking-[-0.025em] text-[#000000] dark:text-[#ffffff] sm:text-2xl"

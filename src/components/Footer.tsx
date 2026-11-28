@@ -80,7 +80,7 @@ export function Footer() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.55, ease: EDITORIAL_EASE }}
-      className="relative z-[2] w-full bg-transparent px-4 pb-6 pt-10 text-[#000000] transition-colors duration-300 dark:text-[#ffffff] sm:px-8 sm:pb-8 sm:pt-14 lg:px-12"
+      className="relative z-[2] w-full bg-transparent px-4 pb-24 pt-10 text-[#000000] transition-colors duration-300 dark:text-[#ffffff] sm:px-8 md:pb-8 sm:pt-14 lg:px-12"
     >
       <div className="glass-surface relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl px-6 pt-12 text-[#000000] transition-colors duration-300 dark:text-[#ffffff] sm:px-10 sm:pt-14 lg:px-14 lg:pt-16">
         <GlassRefraction />

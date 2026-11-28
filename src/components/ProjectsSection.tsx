@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Play } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { GlassRefraction } from './GlassRefraction';
@@ -14,7 +14,7 @@ interface CarouselSlide {
   kind: 'Mockup' | 'Screenshot';
 }
 
-type ProjectFilter = 'All' | 'Laravel & PHP' | 'ASP.NET Core' | 'Frontend & UI';
+type ProjectFilter = 'All' | 'Laravel & PHP' | 'ASP.NET Core';
 
 interface ProjectItem {
   id: string;
@@ -33,7 +33,7 @@ interface ProjectItem {
 
 const EDITORIAL_EASE = [0.16, 1, 0.3, 1] as const;
 
-const FILTER_OPTIONS: ProjectFilter[] = ['All', 'Laravel & PHP', 'ASP.NET Core', 'Frontend & UI'];
+const FILTER_OPTIONS: ProjectFilter[] = ['All', 'Laravel & PHP', 'ASP.NET Core'];
 
 const PROJECTS: ProjectItem[] = [
   {
@@ -264,158 +264,6 @@ const PROJECTS: ProjectItem[] = [
       },
     ],
   },
-  {
-    id: 'solstice-lookbook',
-    index: '07',
-    category: 'Editorial Frontend',
-    filterGroup: 'Frontend & UI',
-    year: '2026',
-    title: 'Solstice Lookbook',
-    subtitle: 'Semantic HTML, CSS Grid & JS Showcase',
-    description:
-      'An editorial architecture showcase crafted purely with semantic HTML5, responsive CSS Grid layouts, and lightweight vanilla JavaScript. Features category-filtered masonry galleries, interactive exhibition timelines, and silky scroll choreography.',
-    architecture: 'Zero-Dependency DOM · CSS Grid Layout Engine',
-    stack: 'HTML · CSS · JavaScript',
-    highlights: [
-      'Pure semantic HTML5 landmarks and keyboard-navigable gallery filters',
-      'Asymmetric responsive CSS Grid templates without external UI libraries',
-      'Hardware-accelerated vanilla JavaScript transitions and archive sorting',
-    ],
-    slides: [
-      {
-        src: '/assets/aistudio/image_12f919ab.png',
-        alt: 'Solstice Lookbook website displayed on a studio laptop mockup',
-        caption: 'Editorial Hero Display',
-        kind: 'Mockup',
-      },
-      {
-        src: '/assets/aistudio/image_c4987ae4.png',
-        alt: 'Solstice Lookbook About Solstice architectural editorial layout screenshot',
-        caption: 'About Solstice Editorial',
-        kind: 'Screenshot',
-      },
-      {
-        src: '/assets/aistudio/image_1bb09ace.png',
-        alt: 'Solstice Lookbook filterable architectural masonry gallery screenshot',
-        caption: 'Asymmetric CSS Grid Gallery',
-        kind: 'Screenshot',
-      },
-    ],
-  },
-  {
-    id: 'meridian-agency',
-    index: '08',
-    category: 'UI System & Calculator',
-    filterGroup: 'Frontend & UI',
-    year: '2025',
-    title: 'Meridian Design System',
-    subtitle: 'Bootstrap 5 Kit & Scope Estimator',
-    description:
-      'A modular Bootstrap agency toolkit paired with an interactive JavaScript scope and budget estimator. Standardizes 12-column responsive layouts, form states, and real-time client pricing calculations across mobile, tablet, and desktop breakpoints.',
-    architecture: 'Modular Bootstrap SCSS · Reactive JS State',
-    stack: 'Bootstrap · HTML · CSS · JavaScript',
-    highlights: [
-      '12-column Bootstrap breakpoint previewer with live code export',
-      'Interactive vanilla JS project estimator calculating itemized scopes live',
-      'Accessible custom form controls, sliders, and responsive navigation patterns',
-    ],
-    slides: [
-      {
-        src: '/assets/aistudio/image_b14abe2a.png',
-        alt: 'Meridian Design System displayed across monitor, laptop, tablet, and phone devices',
-        caption: 'Design System Display',
-        kind: 'Mockup',
-      },
-      {
-        src: '/assets/aistudio/image_97b69115.png',
-        alt: 'Meridian interactive JavaScript project quote and scope estimator screenshot',
-        caption: 'Interactive Quote Estimator',
-        kind: 'Screenshot',
-      },
-      {
-        src: '/assets/aistudio/image_b082f283.png',
-        alt: 'Meridian typography, color system, 8pt grid, and component library screenshot',
-        caption: 'Bootstrap Grid & UI Kit',
-        kind: 'Screenshot',
-      },
-    ],
-  },
-  {
-    id: 'vanguard-ledger',
-    index: '09',
-    category: 'Financial Accounting',
-    filterGroup: 'Laravel & PHP',
-    year: '2025',
-    title: 'Vanguard Finance Ledger',
-    subtitle: 'Core PHP & MySQL Double-Entry Engine',
-    description:
-      'An object-oriented PHP and MySQL financial ledger engineered for small businesses and creative studios. Automates double-entry debit/credit reconciliation, quarterly cashflow analytics, and itemized CSV tax exports using parameterized PDO queries.',
-    architecture: 'OOP PHP Services · Indexed MySQL PDO Ledger',
-    stack: 'PHP · MySQL · Bootstrap · HTML · CSS · JavaScript',
-    highlights: [
-      'Strict PDO prepared statements and double-entry balance validation',
-      'Quarterly cashflow area charts and automated tax breakdown summaries',
-      'Filterable general ledger with one-click CSV and print reporting',
-    ],
-    slides: [
-      {
-        src: '/assets/aistudio/image_a4078a25.png',
-        alt: 'Vanguard Finance Ledger accounting dashboard on a studio laptop mockup',
-        caption: 'Accounting Dashboard',
-        kind: 'Mockup',
-      },
-      {
-        src: '/assets/aistudio/image_2d6d34eb.png',
-        alt: 'Vanguard Finance Ledger double-entry journal entry and transactions table screenshot',
-        caption: 'General Ledger Table',
-        kind: 'Screenshot',
-      },
-      {
-        src: '/assets/aistudio/image_79610a27.png',
-        alt: 'Vanguard Finance Ledger financial role permissions and activity console screenshot',
-        caption: 'Financial Roles & Audit',
-        kind: 'Screenshot',
-      },
-    ],
-  },
-  {
-    id: 'aegis-telemetry',
-    index: '10',
-    category: 'Security & API Gateway',
-    filterGroup: 'ASP.NET Core',
-    year: '2026',
-    title: 'Aegis Auth & Telemetry',
-    subtitle: 'C# Identity & MySQL Audit Console',
-    description:
-      'A high-security authentication gateway and API telemetry console written in C# and ASP.NET Core. Manages active JWT user sessions, enforces role-based access policies, and logs endpoint latency metrics in indexed MySQL audit tables.',
-    architecture: 'ASP.NET Core Middleware · MySQL Audit Pipeline',
-    stack: 'C# · ASP.NET Core · MySQL · JavaScript · CSS',
-    highlights: [
-      'Instant session revocation and device/location tracking via C# middleware',
-      'Sub-millisecond SQL query duration profiling across API endpoints',
-      'Role-scoped permission policies with full request ID traceability',
-    ],
-    slides: [
-      {
-        src: '/assets/aistudio/image_e621b124.png',
-        alt: 'Aegis Auth and Telemetry active device sessions console on a studio laptop mockup',
-        caption: 'Active Sessions Overview',
-        kind: 'Mockup',
-      },
-      {
-        src: '/assets/aistudio/image_3b024516.png',
-        alt: 'Aegis Auth and Telemetry real-time latency, traffic, and HTTP error telemetry dashboard screenshot',
-        caption: 'Telemetry & Latency Metrics',
-        kind: 'Screenshot',
-      },
-      {
-        src: '/assets/aistudio/image_5f545740.png',
-        alt: 'Aegis Auth and Telemetry authentication requests, MFA adoption, and security health console screenshot',
-        caption: 'Auth & Security Health',
-        kind: 'Screenshot',
-      },
-    ],
-  },
 ];
 
 function getFastProjectWebp(src: string): string | null {
@@ -510,11 +358,29 @@ function ProjectCoverImage({
 export function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>('All');
   const [liveProject, setLiveProject] = useState<ProjectItem | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const handleChange = () => setIsMobile(mediaQuery.matches);
+    handleChange();
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  const baseProjects = isMobile ? PROJECTS.slice(0, 5) : PROJECTS;
+  const availableFilters = FILTER_OPTIONS.filter(
+    (filter) =>
+      filter === 'All' || baseProjects.some((p) => p.filterGroup === filter)
+  );
+  const effectiveFilter = availableFilters.includes(activeFilter) ? activeFilter : 'All';
 
   const visibleProjects =
-    activeFilter === 'All'
-      ? PROJECTS
-      : PROJECTS.filter((project) => project.filterGroup === activeFilter);
+    effectiveFilter === 'All'
+      ? baseProjects
+      : baseProjects.filter((project) => project.filterGroup === effectiveFilter);
 
   return (
     <ScrollRevealSection
@@ -540,12 +406,12 @@ export function ProjectsSection() {
             aria-label="Filter projects by stack"
             className="glass-control inline-flex flex-wrap items-center gap-1 rounded-full p-1"
           >
-            {FILTER_OPTIONS.map((filter) => {
-              const isSelected = activeFilter === filter;
+            {availableFilters.map((filter) => {
+              const isSelected = effectiveFilter === filter;
               const count =
                 filter === 'All'
-                  ? PROJECTS.length
-                  : PROJECTS.filter((p) => p.filterGroup === filter).length;
+                  ? baseProjects.length
+                  : baseProjects.filter((p) => p.filterGroup === filter).length;
               return (
                 <button
                   key={filter}
@@ -576,7 +442,7 @@ export function ProjectsSection() {
           </div>
 
           <p className="font-display text-xs text-black/60 tabular-nums dark:text-white/60">
-            Showing {visibleProjects.length} of {PROJECTS.length} builds
+            Showing {visibleProjects.length} of {baseProjects.length} builds
           </p>
         </div>
 
@@ -588,7 +454,7 @@ export function ProjectsSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.24, ease: EDITORIAL_EASE }}
-            className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10"
+            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10"
           >
             {visibleProjects.map((project) => (
               <article

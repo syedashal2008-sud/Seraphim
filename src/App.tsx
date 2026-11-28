@@ -121,15 +121,21 @@ function PortfolioApp() {
         <ParticleBackground variant={isDark ? 'dark' : 'light'} />
         <HeroSection />
         <Suspense fallback={null}>
-          <SocialIdCardsSection />
-          <TechStackMarquee />
+          <div className="hidden md:block">
+            <SocialIdCardsSection />
+            <TechStackMarquee />
+          </div>
           <AboutSection />
           <ProjectsSection />
           <TechnicalProficiencySection />
-          <TechStackMarquee />
+          <div className="hidden md:block">
+            <TechStackMarquee />
+          </div>
           <FavoriteProjectSection />
-          <TestimonialsSection />
-          <ComponentPlaygroundSection />
+          <div className="hidden md:block">
+            <TestimonialsSection />
+            <ComponentPlaygroundSection />
+          </div>
           <Footer />
         </Suspense>
       </main>
